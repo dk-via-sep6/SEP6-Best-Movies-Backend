@@ -1,5 +1,5 @@
-﻿using DomainLayer.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using ServiceLayer.Interfaces;
 
 namespace SEP6_Best_Movies_Backend.Controllers
 {
@@ -18,6 +18,7 @@ namespace SEP6_Best_Movies_Backend.Controllers
         [HttpGet("{movieId}")]
         public async Task<IActionResult> FindByIdAsync(int movieId)
         {
+
             var movie = await _movieDataService.FindByIdAsync(movieId);
             if (movie == null)
             {

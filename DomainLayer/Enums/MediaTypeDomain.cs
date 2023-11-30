@@ -1,9 +1,9 @@
 ﻿namespace DomainLayer.Enums
 {
-    public enum Gender
+    public enum MediaTypeDomain
     {
         Unknown,
-        Female,
-        Male
+        Movie,
+        TV
     }
 }

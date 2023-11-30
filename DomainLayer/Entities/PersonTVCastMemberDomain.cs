@@ -1,6 +1,6 @@
 ﻿namespace DomainLayer.Entities
 {
-    public class PersonTVCastMember
+    public class PersonTVCastMemberDomain
     {
         public int TVShowId { get; set; }
         public string Character { get; set; }

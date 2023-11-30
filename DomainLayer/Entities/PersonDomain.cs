@@ -2,7 +2,7 @@
 
 namespace DomainLayer.Entities
 {
-    public class Person
+    public class PersonDomain
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -11,13 +11,13 @@ namespace DomainLayer.Entities
         public string Biography { get; set; }
         public DateTime Birthday { get; set; }
         public DateTime? Deathday { get; set; }
-        public Gender Gender { get; set; }
+        public GenderDomain Gender { get; set; }
         public string Homepage { get; set; }
         public string ImdbId { get; set; }
         public string PlaceOfBirth { get; set; }
         public double Popularity { get; set; }
         public string ProfilePath { get; set; }
-        public Person()
+        public PersonDomain()
         {
             AlsoKnownAs = Array.Empty<string>();
         }

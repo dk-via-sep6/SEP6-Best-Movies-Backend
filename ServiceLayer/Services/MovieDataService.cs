@@ -1,78 +1,87 @@
-﻿using DomainLayer.Entities;
-using DomainLayer.Interfaces;
+﻿using AutoMapper;
+using DomainLayer.Entities;
+using ServiceLayer.DTOs;
+using ServiceLayer.Interfaces;
 
 namespace ServiceLayer.Services
 {
     public class MovieDataService : IMovieDataService
     {
+        private readonly IMapper _mapper;
         private ITheMovieDbWrapperMovieService _movieService;
-        public MovieDataService(ITheMovieDbWrapperMovieService movieService)
+        public MovieDataService(IMapper mapper, ITheMovieDbWrapperMovieService movieService)
         {
+            _mapper = mapper;
             _movieService = movieService;
         }
 
-        public async Task<Movie> FindByIdAsync(int id)
+        public async Task<MovieDTO> FindByIdAsync(int id)
         {
             var movieData = await _movieService.FindByIdAsync(id);
-            return MapToDomainMovie(movieData);
+            var movie = MapToDomainMovie(movieData);
+
+
+
+
+            return _mapper.Map<MovieDTO>(movie);
         }
 
-        public async Task<List<MovieInfo>> SearchByTitleAsync(string title)
+        public async Task<List<MovieInfoDomain>> SearchByTitleAsync(string title)
         {
             var movieData = await _movieService.SearchByTitleAsync(title);
             return movieData.Select(MapToDomainMovieInfo).ToList();
         }
-        public async Task<Movie> GetLatestAsync()
+        public async Task<MovieDomain> GetLatestAsync()
         {
             var movieData = await _movieService.GetLatestAsync();
             return MapToDomainMovie(movieData);
         }
 
-        public async Task<List<Movie>> GetNowPlayingAsync()
+        public async Task<List<MovieDomain>> GetNowPlayingAsync()
         {
             var moviesData = await _movieService.GetNowPlayingAsync();
             return moviesData.Select(MapToDomainMovie).ToList();
         }
 
-        public async Task<List<Movie>> GetUpcomingAsync()
+        public async Task<List<MovieDomain>> GetUpcomingAsync()
         {
             var moviesData = await _movieService.GetUpcomingAsync();
             return moviesData.Select(MapToDomainMovie).ToList();
         }
 
-        public async Task<List<MovieInfo>> GetTopRatedAsync()
+        public async Task<List<MovieInfoDomain>> GetTopRatedAsync()
         {
             var moviesData = await _movieService.GetTopRatedAsync();
             return moviesData.Select(MapToDomainMovieInfo).ToList();
         }
 
-        public async Task<List<MovieInfo>> GetPopularAsync()
+        public async Task<List<MovieInfoDomain>> GetPopularAsync()
         {
             var moviesData = await _movieService.GetPopularAsync();
             return moviesData.Select(MapToDomainMovieInfo).ToList();
         }
 
-        public async Task<MovieCredit> GetCreditAsync(int movieId)
+        public async Task<MovieCreditDomain> GetCreditAsync(int movieId)
         {
             var apiMovieCredit = await _movieService.GetCreditAsync(movieId);
             return MapToDomainMovieCredit(apiMovieCredit);
         }
 
-        public async Task<List<MovieInfo>> GetRecommendationsAsync(int movieId)
+        public async Task<List<MovieInfoDomain>> GetRecommendationsAsync(int movieId)
         {
             var moviesData = await _movieService.GetRecommendationsAsync(movieId);
             return moviesData.Select(MapToDomainMovieInfo).ToList();
         }
 
-        public async Task<List<MovieInfo>> GetSimilarAsync(int movieId)
+        public async Task<List<MovieInfoDomain>> GetSimilarAsync(int movieId)
         {
             var moviesData = await _movieService.GetSimilarAsync(movieId);
             return moviesData.Select(MapToDomainMovieInfo).ToList();
         }
 
-        private Movie MapToDomainMovie(DM.MovieApi.MovieDb.Movies.Movie movieData)
+        private MovieDomain MapToDomainMovie(DM.MovieApi.MovieDb.Movies.Movie movieData)
         {
-            return new Movie
+            return new MovieDomain
             {
                 Id = movieData.Id,
                 Title = movieData.Title,
@@ -103,9 +112,9 @@ namespace ServiceLayer.Services
             };
         }
 
-        private MovieInfo MapToDomainMovieInfo(DM.MovieApi.MovieDb.Movies.MovieInfo movieData)
+        private MovieInfoDomain MapToDomainMovieInfo(DM.MovieApi.MovieDb.Movies.MovieInfo movieData)
         {
-            return new MovieInfo
+            return new MovieInfoDomain
             {
                 Id = movieData.Id,
                 Title = movieData.Title,
@@ -123,9 +132,9 @@ namespace ServiceLayer.Services
             };
         }
 
-        private IReadOnlyList<Genre> MapToDomainGenres(IReadOnlyList<DM.MovieApi.MovieDb.Genres.Genre> apiGenres)
+        private IReadOnlyList<GenreDomain> MapToDomainGenres(IReadOnlyList<DM.MovieApi.MovieDb.Genres.Genre> apiGenres)
         {
-            return apiGenres.Select(g => new Genre
+            return apiGenres.Select(g => new GenreDomain
             {
                 Id = g.Id,
                 Name = g.Name
@@ -133,9 +142,9 @@ namespace ServiceLayer.Services
         }
 
 
-        private MovieCredit MapToDomainMovieCredit(DM.MovieApi.MovieDb.Movies.MovieCredit apiMovieCredit)
+        private MovieCreditDomain MapToDomainMovieCredit(DM.MovieApi.MovieDb.Movies.MovieCredit apiMovieCredit)
         {
-            var domainMovieCredit = new MovieCredit
+            var domainMovieCredit = new MovieCreditDomain
             {
                 MovieId = apiMovieCredit.MovieId,
                 CastMembers = MapCastMembers(apiMovieCredit.CastMembers),
@@ -145,9 +154,9 @@ namespace ServiceLayer.Services
             return domainMovieCredit;
         }
 
-        private IReadOnlyList<MovieCastMember> MapCastMembers(IReadOnlyList<DM.MovieApi.MovieDb.Movies.MovieCastMember> apiCastMembers)
+        private IReadOnlyList<MovieCastMemberDomain> MapCastMembers(IReadOnlyList<DM.MovieApi.MovieDb.Movies.MovieCastMember> apiCastMembers)
         {
-            return apiCastMembers.Select(c => new MovieCastMember
+            return apiCastMembers.Select(c => new MovieCastMemberDomain
             {
                 PersonId = c.PersonId,
                 CastId = c.CastId,
@@ -160,9 +169,9 @@ namespace ServiceLayer.Services
         }
 
 
-        private IReadOnlyList<MovieCrewMember> MapCrewMembers(IReadOnlyList<DM.MovieApi.MovieDb.Movies.MovieCrewMember> apiCrewMembers)
+        private IReadOnlyList<MovieCrewMemberDomain> MapCrewMembers(IReadOnlyList<DM.MovieApi.MovieDb.Movies.MovieCrewMember> apiCrewMembers)
         {
-            return apiCrewMembers.Select(c => new MovieCrewMember
+            return apiCrewMembers.Select(c => new MovieCrewMemberDomain
             {
                 PersonId = c.PersonId,
                 CreditId = c.CreditId,

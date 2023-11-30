@@ -1,5 +1,5 @@
-﻿using DomainLayer.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using ServiceLayer.Interfaces;
 
 namespace SEP6_Best_Movies_Backend.Controllers
 {

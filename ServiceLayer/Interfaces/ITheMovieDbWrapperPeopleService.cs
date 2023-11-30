@@ -1,8 +1,8 @@
-﻿using DomainLayer.Entities;
+﻿using DM.MovieApi.MovieDb.People;
 
-namespace DomainLayer.Interfaces
+namespace ServiceLayer.Interfaces
 {
-    public interface IPeopleDataService
+    public interface ITheMovieDbWrapperPeopleService
     {
         Task<Person> FindByIdAsync(int personId);
         Task<List<PersonInfo>> SearchByNameAsync(string name);

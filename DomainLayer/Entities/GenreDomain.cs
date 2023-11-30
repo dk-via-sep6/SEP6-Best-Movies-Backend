@@ -1,23 +1,23 @@
 ﻿namespace DomainLayer.Entities
 {
-    public class Genre : IEqualityComparer<Genre>
+    public class GenreDomain : IEqualityComparer<GenreDomain>
     {
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public Genre(int id, string name)
+        public GenreDomain(int id, string name)
         {
             Id = id;
             Name = name;
         }
 
-        public Genre()
+        public GenreDomain()
         {
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Genre y))
+            if (!(obj is GenreDomain y))
             {
                 return false;
             }
@@ -25,7 +25,7 @@
             return Equals(this, y);
         }
 
-        public bool Equals(Genre x, Genre y)
+        public bool Equals(GenreDomain x, GenreDomain y)
         {
             if (x != null && y != null && x.Id == y.Id)
             {
@@ -40,7 +40,7 @@
             return GetHashCode(this);
         }
 
-        public int GetHashCode(Genre obj)
+        public int GetHashCode(GenreDomain obj)
         {
             return (17 * 23 + obj.Id.GetHashCode()) * 23 + obj.Name.GetHashCode();
         }

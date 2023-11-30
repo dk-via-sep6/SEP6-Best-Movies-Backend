@@ -1,12 +1,11 @@
 ﻿using DM.MovieApi.MovieDb;
 using DM.MovieApi.MovieDb.Collections;
 using DM.MovieApi.MovieDb.Companies;
-using DM.MovieApi.MovieDb.Genres;
 using DM.MovieApi.MovieDb.Keywords;
 
 namespace DomainLayer.Entities
 {
-    public class Movie
+    public class MovieDomain
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -17,7 +16,7 @@ namespace DomainLayer.Entities
         public string BackdropPath { get; set; }
         public CollectionInfo MovieCollectionInfo { get; set; }
         public int Budget { get; set; }
-        public IReadOnlyList<Genre> Genres { get; set; }
+        public IReadOnlyList<GenreDomain> Genres { get; set; }
         public string Homepage { get; set; }
         public string ImdbId { get; set; }
         public string OriginalLanguage { get; set; }
@@ -35,9 +34,9 @@ namespace DomainLayer.Entities
         public int VoteCount { get; set; }
         public IReadOnlyList<Keyword> Keywords { get; set; }
 
-        public Movie()
+        public MovieDomain()
         {
-            Genres = Array.Empty<Genre>();
+            Genres = Array.Empty<GenreDomain>();
             Keywords = Array.Empty<Keyword>();
             ProductionCompanies = Array.Empty<ProductionCompanyInfo>();
             ProductionCountries = Array.Empty<Country>();

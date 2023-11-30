@@ -1,7 +1,7 @@
 ﻿using DM.MovieApi;
 using DM.MovieApi.ApiResponse;
 using DM.MovieApi.MovieDb.People;
-using DomainLayer.Interfaces;
+using ServiceLayer.Interfaces;
 
 namespace ServiceLayer.Services
 {

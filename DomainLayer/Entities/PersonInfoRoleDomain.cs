@@ -2,10 +2,10 @@
 
 namespace DomainLayer.Entities
 {
-    public class PersonInfoRole
+    public class PersonInfoRoleDomain
     {
         public int Id { get; set; }
-        public MediaType MediaType { get; set; }
+        public MediaTypeDomain MediaType { get; set; }
         public string TVShowName { get; set; }
         public string TVShowOriginalName { get; set; }
         public string MovieTitle { get; set; }
@@ -17,22 +17,22 @@ namespace DomainLayer.Entities
         public string Overview { get; set; }
         public bool IsAdultThemed { get; set; }
         public bool IsVideo { get; set; }
-        public IReadOnlyList<Genre> Genres { get; set; }
+        public IReadOnlyList<GenreDomain> Genres { get; set; }
         public string OriginalLanguage { get; set; }
         public double Popularity { get; set; }
         public int VoteCount { get; set; }
         public double VoteAverage { get; set; }
         public IReadOnlyList<string> OriginCountry { get; set; }
 
-        public PersonInfoRole()
+        public PersonInfoRoleDomain()
         {
-            Genres = Array.Empty<Genre>();
+            Genres = Array.Empty<GenreDomain>();
             OriginCountry = Array.Empty<string>();
         }
 
         public override string ToString()
         {
-            if (MediaType == MediaType.Movie)
+            if (MediaType == MediaTypeDomain.Movie)
             {
                 return $"Movie: {MovieTitle} ({Id} - {MovieReleaseDate:yyyy-MM-dd})";
             }

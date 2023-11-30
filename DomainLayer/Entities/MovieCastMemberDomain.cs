@@ -1,6 +1,6 @@
 ﻿namespace DomainLayer.Entities
 {
-    public class MovieCastMember
+    public class MovieCastMemberDomain
     {
         public int PersonId { get; set; }
         public int CastId { get; set; }

@@ -1,8 +1,8 @@
-﻿using DomainLayer.Entities;
+﻿using DM.MovieApi.MovieDb.Movies;
 
-namespace DomainLayer.Interfaces
+namespace ServiceLayer.Interfaces
 {
-    public interface IMovieDataService
+    public interface ITheMovieDbWrapperMovieService
     {
         Task<Movie> FindByIdAsync(int movieId);
         Task<List<MovieInfo>> SearchByTitleAsync(string title);

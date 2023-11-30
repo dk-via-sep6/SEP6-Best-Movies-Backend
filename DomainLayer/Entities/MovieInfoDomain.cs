@@ -2,13 +2,13 @@
 
 namespace DomainLayer.Entities
 {
-    public class MovieInfo
+    public class MovieInfoDomain
     {
         public int Id { get; set; }
         public string Title { get; set; }
         public bool IsAdultThemed { get; set; }
         public string BackdropPath { get; set; }
-        public IReadOnlyList<Genre> Genres { get; set; }
+        public IReadOnlyList<GenreDomain> Genres { get; set; }
         public string OriginalTitle { get; set; }
         public string Overview { get; set; }
         public DateTime ReleaseDate { get; set; }
@@ -17,9 +17,9 @@ namespace DomainLayer.Entities
         public bool Video { get; set; }
         public double VoteAverage { get; set; }
         public int VoteCount { get; set; }
-        public MovieInfo()
+        public MovieInfoDomain()
         {
-            Genres = Array.Empty<Genre>();
+            Genres = Array.Empty<GenreDomain>();
             ReleaseDate = DateTime.UnixEpoch;
         }
 

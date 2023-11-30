@@ -5,68 +5,68 @@ namespace ServiceLayer.Services
 {
     public class MovieDataService : IMovieDataService
     {
-        private ITheMovieDbWrapperService _dbWrapper;
-        public MovieDataService(ITheMovieDbWrapperService movieDbWrapper)
+        private ITheMovieDbWrapperMovieService _movieService;
+        public MovieDataService(ITheMovieDbWrapperMovieService movieService)
         {
-            _dbWrapper = movieDbWrapper;
+            _movieService = movieService;
         }
 
         public async Task<Movie> FindByIdAsync(int id)
         {
-            var movieData = await _dbWrapper.FindByIdAsync(id);
+            var movieData = await _movieService.FindByIdAsync(id);
             return MapToDomainMovie(movieData);
         }
 
         public async Task<List<MovieInfo>> SearchByTitleAsync(string title)
         {
-            var movieData = await _dbWrapper.SearchByTitleAsync(title);
+            var movieData = await _movieService.SearchByTitleAsync(title);
             return movieData.Select(MapToDomainMovieInfo).ToList();
         }
         public async Task<Movie> GetLatestAsync()
         {
-            var movieData = await _dbWrapper.GetLatestAsync();
+            var movieData = await _movieService.GetLatestAsync();
             return MapToDomainMovie(movieData);
         }
 
         public async Task<List<Movie>> GetNowPlayingAsync()
         {
-            var moviesData = await _dbWrapper.GetNowPlayingAsync();
+            var moviesData = await _movieService.GetNowPlayingAsync();
             return moviesData.Select(MapToDomainMovie).ToList();
         }
 
         public async Task<List<Movie>> GetUpcomingAsync()
         {
-            var moviesData = await _dbWrapper.GetUpcomingAsync();
+            var moviesData = await _movieService.GetUpcomingAsync();
             return moviesData.Select(MapToDomainMovie).ToList();
         }
 
         public async Task<List<MovieInfo>> GetTopRatedAsync()
         {
-            var moviesData = await _dbWrapper.GetTopRatedAsync();
+            var moviesData = await _movieService.GetTopRatedAsync();
             return moviesData.Select(MapToDomainMovieInfo).ToList();
         }
 
         public async Task<List<MovieInfo>> GetPopularAsync()
         {
-            var moviesData = await _dbWrapper.GetPopularAsync();
+            var moviesData = await _movieService.GetPopularAsync();
             return moviesData.Select(MapToDomainMovieInfo).ToList();
         }
 
         public async Task<MovieCredit> GetCreditAsync(int movieId)
         {
-            var apiMovieCredit = await _dbWrapper.GetCreditAsync(movieId);
+            var apiMovieCredit = await _movieService.GetCreditAsync(movieId);
             return MapToDomainMovieCredit(apiMovieCredit);
         }
 
         public async Task<List<MovieInfo>> GetRecommendationsAsync(int movieId)
         {
-            var moviesData = await _dbWrapper.GetRecommendationsAsync(movieId);
+            var moviesData = await _movieService.GetRecommendationsAsync(movieId);
             return moviesData.Select(MapToDomainMovieInfo).ToList();
         }
 
         public async Task<List<MovieInfo>> GetSimilarAsync(int movieId)
         {
-            var moviesData = await _dbWrapper.GetSimilarAsync(movieId);
+            var moviesData = await _movieService.GetSimilarAsync(movieId);
             return moviesData.Select(MapToDomainMovieInfo).ToList();
         }
 
@@ -83,7 +83,7 @@ namespace ServiceLayer.Services
                 BackdropPath = movieData.BackdropPath,
                 MovieCollectionInfo = movieData.MovieCollectionInfo,
                 Budget = movieData.Budget,
-                Genres = movieData.Genres,
+                Genres = MapToDomainGenres(movieData.Genres),
                 Homepage = movieData.Homepage,
                 ImdbId = movieData.ImdbId,
                 OriginalLanguage = movieData.OriginalLanguage,
@@ -111,7 +111,7 @@ namespace ServiceLayer.Services
                 Title = movieData.Title,
                 IsAdultThemed = movieData.IsAdultThemed,
                 BackdropPath = movieData.BackdropPath,
-                Genres = movieData.Genres,
+                Genres = MapToDomainGenres(movieData.Genres),
                 OriginalTitle = movieData.OriginalTitle,
                 Overview = movieData.Overview,
                 ReleaseDate = movieData.ReleaseDate,
@@ -122,6 +122,16 @@ namespace ServiceLayer.Services
                 VoteCount = movieData.VoteCount
             };
         }
+
+        private IReadOnlyList<Genre> MapToDomainGenres(IReadOnlyList<DM.MovieApi.MovieDb.Genres.Genre> apiGenres)
+        {
+            return apiGenres.Select(g => new Genre
+            {
+                Id = g.Id,
+                Name = g.Name
+            }).ToList();
+        }
+
 
         private MovieCredit MapToDomainMovieCredit(DM.MovieApi.MovieDb.Movies.MovieCredit apiMovieCredit)
         {

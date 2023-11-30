@@ -8,10 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 var bearerToken = builder.Configuration["MovieApi:BearerToken"];
-builder.Services.AddSingleton<ITheMovieDbWrapperService>(new TheMovieDbWrapperService(bearerToken));
+builder.Services.AddSingleton<ITheMovieDbWrapperMovieService>(new TheMovieDbWrapperMovieService(bearerToken));
+builder.Services.AddSingleton<ITheMovieDbWrapperPeopleService>(new TheMovieDbWrapperPeopleService(bearerToken));
 
 // Register your MovieDataService
 builder.Services.AddScoped<IMovieDataService, MovieDataService>();
+builder.Services.AddScoped<IPeopleDataService, PeopleDataService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

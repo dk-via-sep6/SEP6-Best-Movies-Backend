@@ -2,7 +2,7 @@
 
 namespace DomainLayer.Interfaces
 {
-    public interface ITheMovieDbWrapperService
+    public interface ITheMovieDbWrapperMovieService
     {
         Task<Movie> FindByIdAsync(int movieId);
         Task<List<MovieInfo>> SearchByTitleAsync(string title);

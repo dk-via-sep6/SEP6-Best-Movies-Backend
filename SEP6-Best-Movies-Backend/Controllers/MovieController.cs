@@ -7,7 +7,6 @@ namespace SEP6_Best_Movies_Backend.Controllers
     [ApiController]
     public class MoviesController : ControllerBase
     {
-
         private readonly IMovieDataService _movieDataService;
 
         public MoviesController(IMovieDataService movieDataService)
@@ -15,11 +14,11 @@ namespace SEP6_Best_Movies_Backend.Controllers
             _movieDataService = movieDataService;
         }
 
-        // GET: api/movies/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> FindMovieByIdAsync(int id)
+        // GET: api/movies/"id"
+        [HttpGet("{movieId}")]
+        public async Task<IActionResult> FindByIdAsync(int movieId)
         {
-            var movie = await _movieDataService.FindByIdAsync(id);
+            var movie = await _movieDataService.FindByIdAsync(movieId);
             if (movie == null)
             {
                 return NotFound();
@@ -29,7 +28,7 @@ namespace SEP6_Best_Movies_Backend.Controllers
 
         //GET: api/movies/search/
         [HttpGet("search/{title}")]
-        public async Task<IActionResult> SearchMovieByIdAsync(string title)
+        public async Task<IActionResult> SearchByIdAsync(string title)
         {
             var movieList = await _movieDataService.SearchByTitleAsync(title);
             if (movieList == null) { return NotFound(); }
@@ -38,7 +37,7 @@ namespace SEP6_Best_Movies_Backend.Controllers
 
         // GET: api/movies/latest
         [HttpGet("latest")]
-        public async Task<IActionResult> GetLatestMovieAsync()
+        public async Task<IActionResult> GetLatestAsync()
         {
             var movie = await _movieDataService.GetLatestAsync();
             if (movie == null) { return NotFound(); }

@@ -18,7 +18,16 @@ IMapper mapper = config.CreateMapper();
 
 builder.Services.AddSingleton(mapper);
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:3000") // Replace with the actual origin of your frontend app
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -43,7 +52,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors("AllowSpecificOrigin");
 
 
 

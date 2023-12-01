@@ -18,47 +18,54 @@ namespace ServiceLayer.Services
         public async Task<MovieDTO> FindByIdAsync(int id)
         {
             var movieData = await _movieService.FindByIdAsync(id);
-            var movie = MapToDomainMovie(movieData);
-
-
-
-
+            var movie = _mapper.Map<MovieDomain>(movieData);
             return _mapper.Map<MovieDTO>(movie);
         }
 
-        public async Task<List<MovieInfoDomain>> SearchByTitleAsync(string title)
+        public async Task<List<MovieDTO>> SearchByTitleAsync(string title)
         {
             var movieData = await _movieService.SearchByTitleAsync(title);
-            return movieData.Select(MapToDomainMovieInfo).ToList();
+            var domainObject = _mapper.Map<List<MovieInfoDomain>>(movieData);
+
+            return _mapper.Map<List<MovieDTO>>(domainObject);
         }
-        public async Task<MovieDomain> GetLatestAsync()
+        public async Task<MovieDTO> GetLatestAsync()
         {
             var movieData = await _movieService.GetLatestAsync();
-            return MapToDomainMovie(movieData);
+            var movie = _mapper.Map<MovieDomain>(movieData);
+            return _mapper.Map<MovieDTO>(movie);
         }
 
-        public async Task<List<MovieDomain>> GetNowPlayingAsync()
+        public async Task<List<MovieDTO>> GetNowPlayingAsync()
         {
-            var moviesData = await _movieService.GetNowPlayingAsync();
-            return moviesData.Select(MapToDomainMovie).ToList();
+            var movieData = await _movieService.GetNowPlayingAsync();
+            var domainObject = _mapper.Map<List<MovieDomain>>(movieData);
+
+            return _mapper.Map<List<MovieDTO>>(domainObject);
         }
 
-        public async Task<List<MovieDomain>> GetUpcomingAsync()
+        public async Task<List<MovieDTO>> GetUpcomingAsync()
         {
-            var moviesData = await _movieService.GetUpcomingAsync();
-            return moviesData.Select(MapToDomainMovie).ToList();
+            var movieData = await _movieService.GetUpcomingAsync();
+            var domainObject = _mapper.Map<List<MovieDomain>>(movieData);
+
+            return _mapper.Map<List<MovieDTO>>(domainObject);
         }
 
-        public async Task<List<MovieInfoDomain>> GetTopRatedAsync()
+        public async Task<List<MovieDTO>> GetTopRatedAsync()
         {
-            var moviesData = await _movieService.GetTopRatedAsync();
-            return moviesData.Select(MapToDomainMovieInfo).ToList();
+            var movieData = await _movieService.GetTopRatedAsync();
+            var domainObject = _mapper.Map<List<MovieInfoDomain>>(movieData);
+
+            return _mapper.Map<List<MovieDTO>>(domainObject);
         }
 
-        public async Task<List<MovieInfoDomain>> GetPopularAsync()
+        public async Task<List<MovieDTO>> GetPopularAsync()
         {
-            var moviesData = await _movieService.GetPopularAsync();
-            return moviesData.Select(MapToDomainMovieInfo).ToList();
+            var movieData = await _movieService.GetPopularAsync();
+            var domainObject = _mapper.Map<List<MovieInfoDomain>>(movieData);
+
+            return _mapper.Map<List<MovieDTO>>(domainObject);
         }
 
         public async Task<MovieCreditDomain> GetCreditAsync(int movieId)

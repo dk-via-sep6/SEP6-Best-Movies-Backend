@@ -1,4 +1,5 @@
 using AutoMapper;
+using DM.MovieApi.MovieDb.Genres;
 using DM.MovieApi.MovieDb.Movies;
 using DomainLayer.Entities;
 using ServiceLayer.DTOs;
@@ -12,6 +13,12 @@ var config = new MapperConfiguration(cfg =>
 {
     cfg.CreateMap<MovieDomain, MovieDTO>();
     cfg.CreateMap<Movie, MovieDomain>();
+    cfg.CreateMap<Genre, GenreDomain>();
+    cfg.CreateMap<MovieInfo, MovieInfoDomain>();
+    cfg.CreateMap<MovieInfoDomain, MovieDTO>();
+    cfg.CreateMap<MovieCredit, MovieCreditDomain>();
+    cfg.CreateMap<MovieCastMember, MovieCastMemberDomain>();
+    cfg.CreateMap<MovieCrewMember, MovieCrewMemberDomain>();
     // Add other mappings here
 });
 IMapper mapper = config.CreateMapper();

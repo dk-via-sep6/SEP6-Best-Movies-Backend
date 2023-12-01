@@ -1,6 +1,7 @@
 using AutoMapper;
 using DM.MovieApi.MovieDb.Movies;
 using DomainLayer.Entities;
+using Microsoft.EntityFrameworkCore;
 using ServiceLayer.DTOs;
 using ServiceLayer.Interfaces;
 using ServiceLayer.Services;
@@ -30,10 +31,17 @@ builder.Services.AddSingleton<ITheMovieDbWrapperPeopleService>(_ => new TheMovie
 // Register your MovieDataService
 builder.Services.AddScoped<IMovieDataService, MovieDataService>();
 builder.Services.AddScoped<IPeopleDataService, PeopleDataService>();
+builder.Services.AddScoped<IUserDataService, UserDataService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(connectionString)); //adjust connection string
 
 var app = builder.Build();
 

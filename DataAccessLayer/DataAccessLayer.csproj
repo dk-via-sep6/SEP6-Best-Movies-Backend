@@ -17,10 +17,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DbContext\" />
     <Folder Include="Migrations\" />
     <Folder Include="Configurations\" />
-    <Folder Include="Repositories\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DomainLayer\DomainLayer.csproj" />
   </ItemGroup>
 
 </Project>

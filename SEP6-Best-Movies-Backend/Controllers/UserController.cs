@@ -34,7 +34,7 @@ namespace SEP6_Best_Movies_Backend.Controllers
 
             await Console.Out.WriteLineAsync(user.Username);
             await _userDataService.CreateUser(user);
-            
+
             // For testing, simply return the received user data
             return Ok(user);
         }

@@ -5,7 +5,7 @@ namespace ServiceLayer.Interfaces
 {
     public interface IUserDataService
     {
-        Task<UserDomain> CreateUser(UserDTO user);
+        Task CreateUser(UserDTO user);
    
     }
 }

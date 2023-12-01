@@ -2,19 +2,27 @@
 using ServiceLayer.DTOs;
 using ServiceLayer.Interfaces;
 using DataAccessLayer.Interfaces;
+using AutoMapper;
 
 namespace ServiceLayer.Services
 {
     public class UserDataService : IUserDataService
     {
         private readonly IUserRepository _userRepository;
-        public UserDataService(IUserRepository userRepository) {
+
+        private readonly IMapper _mapper;
+
+        public UserDataService(IMapper mapper, IUserRepository userRepository) {
+            _mapper = mapper;
             _userRepository = userRepository;
         }
 
-        public Task<UserDomain> CreateUser(UserDTO user)
+        public async Task CreateUser(UserDTO user)
         {
-            throw new NotImplementedException();
+            var userData = _mapper.Map<UserDomain>(user);
+           await _userRepository.CreateUser(userData);
         }
+
+  
     }
 }

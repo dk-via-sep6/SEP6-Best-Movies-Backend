@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.Dynamic;
+using ServiceLayer.DTOs;
+using ServiceLayer.Interfaces;
 
 namespace SEP6_Best_Movies_Backend.Controllers
 {
@@ -8,20 +8,32 @@ namespace SEP6_Best_Movies_Backend.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+
+        private readonly IUserDataService _userDataService;
+
+        public UserController(IUserDataService userDataService)
+        {
+            _userDataService = userDataService;
+        }
+
         // POST: api/user
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] ExpandoObject user)
+        public async Task<IActionResult> CreateUser([FromBody] UserDTO user)
         {
             if (user == null)
             {
-                return BadRequest("bad ");
+                return BadRequest("User data is required");
             }
-            string response = JsonConvert.SerializeObject(user);
-            await Console.Out.WriteLineAsync(response);
 
-            return Ok(user);
+            // Here you can add further validation or processing for the user data as needed
+
+            //string response = JsonConvert.SerializeObject(user);
+
+            await Console.Out.WriteLineAsync(user.Username);
+            await _userDataService.CreateUser(user);
+
             // For testing, simply return the received user data
-
+            return Ok(user);
         }
     }
 }

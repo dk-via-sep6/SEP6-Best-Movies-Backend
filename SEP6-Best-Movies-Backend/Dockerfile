@@ -13,7 +13,7 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
-Build image with .NET SDK
+
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
@@ -33,3 +33,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "SEP6-Best-Movies-Backend.dll"]
+    

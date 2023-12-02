@@ -23,6 +23,8 @@ var config = new MapperConfiguration(cfg =>
     cfg.CreateMap<MovieCredit, MovieCreditDomain>();
     cfg.CreateMap<MovieCastMember, MovieCastMemberDomain>();
     cfg.CreateMap<MovieCrewMember, MovieCrewMemberDomain>();
+    cfg.CreateMap<UserDTO, UserDomain>();
+
     // Add other mappings here
 });
 IMapper mapper = config.CreateMapper();

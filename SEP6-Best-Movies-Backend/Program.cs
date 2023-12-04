@@ -1,7 +1,11 @@
 using AutoMapper;
+using DataAccessLayer.DbContextFolder;
+using DataAccessLayer.Interfaces;
+using DataAccessLayer.Repositories;
 using DM.MovieApi.MovieDb.Genres;
 using DM.MovieApi.MovieDb.Movies;
 using DomainLayer.Entities;
+using Microsoft.EntityFrameworkCore;
 using ServiceLayer.DTOs;
 using ServiceLayer.Interfaces;
 using ServiceLayer.Services;
@@ -19,6 +23,8 @@ var config = new MapperConfiguration(cfg =>
     cfg.CreateMap<MovieCredit, MovieCreditDomain>();
     cfg.CreateMap<MovieCastMember, MovieCastMemberDomain>();
     cfg.CreateMap<MovieCrewMember, MovieCrewMemberDomain>();
+    cfg.CreateMap<UserDTO, UserDomain>();
+
     // Add other mappings here
 });
 IMapper mapper = config.CreateMapper();
@@ -46,10 +52,22 @@ builder.Services.AddSingleton<ITheMovieDbWrapperPeopleService>(_ => new TheMovie
 // Register your MovieDataService
 builder.Services.AddScoped<IMovieDataService, MovieDataService>();
 builder.Services.AddScoped<IPeopleDataService, PeopleDataService>();
+builder.Services.AddScoped<IUserDataService, UserDataService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(
+        connectionString, // Use the connectionString variable directly
+        x => x.MigrationsAssembly("DataAccessLayer") // Specify the migrations assembly here
+    ));
+
 
 var app = builder.Build();
 

@@ -17,9 +17,11 @@ var config = new MapperConfiguration(cfg =>
     cfg.CreateMap<MovieInfo, MovieInfoDomain>();
     cfg.CreateMap<MovieInfoDomain, MovieDTO>();
     cfg.CreateMap<MovieCredit, MovieCreditDomain>();
+    cfg.CreateMap<MovieCreditDomain, MovieCreditDTO>();
     cfg.CreateMap<MovieCastMember, MovieCastMemberDomain>();
     cfg.CreateMap<MovieCrewMember, MovieCrewMemberDomain>();
-    // Add other mappings here
+    cfg.CreateMap<MovieCastMemberDomain, MovieCastMemberDTO>();
+    cfg.CreateMap<MovieCrewMemberDomain, MovieCrewMemberDTO>();
 });
 IMapper mapper = config.CreateMapper();
 

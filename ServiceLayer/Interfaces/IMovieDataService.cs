@@ -12,7 +12,7 @@ namespace ServiceLayer.Interfaces
         Task<List<MovieDTO>> GetUpcomingAsync();
         Task<List<MovieDTO>> GetTopRatedAsync();
         Task<List<MovieDTO>> GetPopularAsync();
-        Task<MovieCreditDomain> GetCreditAsync(int movieId);
+        Task<MovieCreditDTO> GetCreditAsync(int movieId);
         Task<List<MovieInfoDomain>> GetRecommendationsAsync(int movieId);
         Task<List<MovieInfoDomain>> GetSimilarAsync(int movieId);
     }

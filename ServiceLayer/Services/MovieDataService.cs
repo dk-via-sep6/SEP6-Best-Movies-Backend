@@ -68,10 +68,12 @@ namespace ServiceLayer.Services
             return _mapper.Map<List<MovieDTO>>(domainObject);
         }
 
-        public async Task<MovieCreditDomain> GetCreditAsync(int movieId)
+        public async Task<MovieCreditDTO> GetCreditAsync(int movieId)
         {
             var apiMovieCredit = await _movieService.GetCreditAsync(movieId);
-            return MapToDomainMovieCredit(apiMovieCredit);
+            var DomainObject = _mapper.Map<MovieCreditDomain>(apiMovieCredit);
+
+            return _mapper.Map<MovieCreditDTO>(DomainObject);
         }
 
         public async Task<List<MovieInfoDomain>> GetRecommendationsAsync(int movieId)

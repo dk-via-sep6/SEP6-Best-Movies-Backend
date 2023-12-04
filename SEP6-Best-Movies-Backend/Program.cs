@@ -1,7 +1,7 @@
 using AutoMapper;
 using DataAccessLayer.DbContextFolder;
 using DataAccessLayer.Interfaces;
-using DataAccessLayer.Repositories;
+using DataAccessLayer.Repository;
 using DM.MovieApi.MovieDb.Genres;
 using DM.MovieApi.MovieDb.Movies;
 using DomainLayer.Entities;
@@ -24,6 +24,7 @@ var config = new MapperConfiguration(cfg =>
     cfg.CreateMap<MovieCastMember, MovieCastMemberDomain>();
     cfg.CreateMap<MovieCrewMember, MovieCrewMemberDomain>();
     cfg.CreateMap<UserDTO, UserDomain>();
+    cfg.CreateMap<UserDomain, UserDTO>();
 
     // Add other mappings here
 });

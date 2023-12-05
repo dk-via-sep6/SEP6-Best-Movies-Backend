@@ -8,9 +8,5 @@
         public string Job { get; set; }
         public string Name { get; set; }
         public string ProfilePath { get; set; }
-        public override string ToString()
-        {
-            return $"{Name} | {Department} | {Job}";
-        }
     }
 }

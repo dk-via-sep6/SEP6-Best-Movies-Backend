@@ -1,6 +1,4 @@
-﻿using DomainLayer.Entities;
-
-namespace ServiceLayer.DTOs
+﻿namespace ServiceLayer.DTOs
 {
     public class MovieDTO
     {
@@ -12,7 +10,7 @@ namespace ServiceLayer.DTOs
         public bool IsAdultThemed { get; set; }
         public string BackdropPath { get; set; }
         public string OriginalLanguage { get; set; }
-        public IReadOnlyList<GenreDomain> Genres { get; set; }
+        public IReadOnlyList<GenreDTO> Genres { get; set; }
         public int Runtime { get; set; }
         public double VoteAverage { get; set; }
         public int VoteCount { get; set; }

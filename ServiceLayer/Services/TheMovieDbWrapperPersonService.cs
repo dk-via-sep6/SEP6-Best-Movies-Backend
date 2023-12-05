@@ -5,11 +5,11 @@ using ServiceLayer.Interfaces;
 
 namespace ServiceLayer.Services
 {
-    public class TheMovieDbWrapperPeopleService : ITheMovieDbWrapperPeopleService
+    public class TheMovieDbWrapperPersonService : ITheMovieDbWrapperPersonService
     {
         private readonly string _bearerToken;
 
-        public TheMovieDbWrapperPeopleService(string token)
+        public TheMovieDbWrapperPersonService(string token)
         {
             _bearerToken = token;
             MovieDbFactory.RegisterSettings(_bearerToken);

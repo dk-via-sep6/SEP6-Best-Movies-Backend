@@ -4,6 +4,7 @@ using DataAccessLayer.Interfaces;
 using DataAccessLayer.Repository;
 using DM.MovieApi.MovieDb.Genres;
 using DM.MovieApi.MovieDb.Movies;
+using DM.MovieApi.MovieDb.People;
 using DomainLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using ServiceLayer.DTOs;
@@ -14,20 +15,28 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 var config = new MapperConfiguration(cfg =>
-{
-    cfg.CreateMap<MovieDomain, MovieDTO>();
+{   //Movie Mappings 
     cfg.CreateMap<Movie, MovieDomain>();
+    cfg.CreateMap<MovieDomain, MovieDTO>();
     cfg.CreateMap<Genre, GenreDomain>();
+    cfg.CreateMap<GenreDomain, GenreDTO>();
     cfg.CreateMap<MovieInfo, MovieInfoDomain>();
     cfg.CreateMap<MovieInfoDomain, MovieDTO>();
     cfg.CreateMap<MovieCredit, MovieCreditDomain>();
     cfg.CreateMap<MovieCreditDomain, MovieCreditDTO>();
     cfg.CreateMap<MovieCastMember, MovieCastMemberDomain>();
-    cfg.CreateMap<MovieCrewMember, MovieCrewMemberDomain>();
     cfg.CreateMap<MovieCastMemberDomain, MovieCastMemberDTO>();
+    cfg.CreateMap<MovieCrewMember, MovieCrewMemberDomain>();
     cfg.CreateMap<MovieCrewMemberDomain, MovieCrewMemberDTO>();
+
+    //User Mappings
     cfg.CreateMap<UserDTO, UserDomain>();
     cfg.CreateMap<UserDomain, UserDTO>();
+
+
+    //Person Mappings
+    cfg.CreateMap<Person, PersonDomain>();
+    cfg.CreateMap<PersonDomain, PersonDTO>();
 
     // Add other mappings here
 });
@@ -40,7 +49,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigin",
         builder =>
         {
-            builder.WithOrigins("http://localhost:3000") // Replace with the actual origin of your frontend app
+            builder.WithOrigins("http://localhost:3000")
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });
@@ -51,11 +60,11 @@ builder.Services.AddControllers();
 
 var bearerToken = builder.Configuration["MovieApi:BearerToken"];
 builder.Services.AddSingleton<ITheMovieDbWrapperMovieService>(_ => new TheMovieDbWrapperMovieService(bearerToken));
-builder.Services.AddSingleton<ITheMovieDbWrapperPeopleService>(_ => new TheMovieDbWrapperPeopleService(bearerToken));
+builder.Services.AddSingleton<ITheMovieDbWrapperPersonService>(_ => new TheMovieDbWrapperPersonService(bearerToken));
 
 // Register your MovieDataService
 builder.Services.AddScoped<IMovieDataService, MovieDataService>();
-builder.Services.AddScoped<IPeopleDataService, PeopleDataService>();
+builder.Services.AddScoped<IPersonDataService, PersonDataService>();
 builder.Services.AddScoped<IUserDataService, UserDataService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 

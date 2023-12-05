@@ -2,7 +2,7 @@
 
 namespace ServiceLayer.Interfaces
 {
-    public interface ITheMovieDbWrapperPeopleService
+    public interface ITheMovieDbWrapperPersonService
     {
         Task<Person> FindByIdAsync(int personId);
         Task<List<PersonInfo>> SearchByNameAsync(string name);

@@ -5,20 +5,20 @@ namespace SEP6_Best_Movies_Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PeopleController : ControllerBase
+    public class PersonController : ControllerBase
     {
-        private readonly IPeopleDataService _peopleDataService;
+        private readonly IPersonDataService _personDataService;
 
-        public PeopleController(IPeopleDataService peopleDataService)
+        public PersonController(IPersonDataService personDataService)
         {
-            _peopleDataService = peopleDataService;
+            _personDataService = personDataService;
         }
 
         //GET: api/people/"personId"
         [HttpGet("{personId}")]
         public async Task<IActionResult> FindByIdAsync(int personId)
         {
-            var person = await _peopleDataService.FindByIdAsync(personId);
+            var person = await _personDataService.FindByIdAsync(personId);
             if (person == null)
             {
                 return NotFound();
@@ -30,7 +30,7 @@ namespace SEP6_Best_Movies_Backend.Controllers
         [HttpGet("search/{name}")]
         public async Task<IActionResult> SearchByNameAsync(string name)
         {
-            var personInfo = await _peopleDataService.SearchByNameAsync(name);
+            var personInfo = await _personDataService.SearchByNameAsync(name);
             if (personInfo == null)
             {
                 return NotFound();
@@ -42,7 +42,7 @@ namespace SEP6_Best_Movies_Backend.Controllers
         [HttpGet("credits/movie/{personId}")]
         public async Task<IActionResult> GetMovieCreditsAsync(int personId)
         {
-            var personMovieCredit = await _peopleDataService.GetMovieCreditsAsync(personId);
+            var personMovieCredit = await _personDataService.GetMovieCreditsAsync(personId);
             if (personMovieCredit == null)
             {
                 return NotFound();
@@ -54,7 +54,7 @@ namespace SEP6_Best_Movies_Backend.Controllers
         [HttpGet("credits/tv/{personId}")]
         public async Task<IActionResult> GetTVCreditsAsync(int personId)
         {
-            var personTVCredit = await _peopleDataService.GetTVCreditsAsync(personId);
+            var personTVCredit = await _personDataService.GetTVCreditsAsync(personId);
             if (personTVCredit == null)
             {
                 return NotFound();

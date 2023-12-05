@@ -9,9 +9,5 @@
         public string Name { get; set; }
         public int Order { get; set; }
         public string ProfilePath { get; set; }
-        public override string ToString()
-        {
-            return Character + ": " + Name;
-        }
     }
 }

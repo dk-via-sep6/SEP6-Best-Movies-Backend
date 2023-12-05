@@ -1,20 +1,25 @@
-﻿using DomainLayer.Entities;
+﻿using AutoMapper;
+using DomainLayer.Entities;
 using DomainLayer.Enums;
+using ServiceLayer.DTOs;
 using ServiceLayer.Interfaces;
 
 namespace ServiceLayer.Services
 {
-    public class PeopleDataService : IPeopleDataService
+    public class PersonDataService : IPersonDataService
     {
-        private ITheMovieDbWrapperPeopleService _peopleService;
-        public PeopleDataService(ITheMovieDbWrapperPeopleService peopleService)
+        private readonly IMapper _mapper;
+        private readonly ITheMovieDbWrapperPersonService _peopleService;
+        public PersonDataService(IMapper mapper, ITheMovieDbWrapperPersonService peopleService)
         {
+            _mapper = mapper;
             _peopleService = peopleService;
         }
-        public async Task<PersonDomain> FindByIdAsync(int personId)
+        public async Task<PersonDTO> FindByIdAsync(int personId)
         {
             var personData = await _peopleService.FindByIdAsync(personId);
-            return MapToDomainPerson(personData);
+            var domainPerson = _mapper.Map<PersonDomain>(personData);
+            return _mapper.Map<PersonDTO>(domainPerson);
         }
         public async Task<PersonMovieCreditDomain> GetMovieCreditsAsync(int personId)
         {

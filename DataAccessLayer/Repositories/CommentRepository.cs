@@ -44,6 +44,7 @@ namespace DataAccessLayer.Repositories
                           Id = comment.Id,
                           AuthorId = comment.AuthorId, // Include this line
                           MovieId = comment.MovieId,
+                          LikedBy = comment.LikedBy,
                           Timestamp = comment.Timestamp,
                           Content = comment.Content,
                           AuthorUsername = user.Username // Map the username

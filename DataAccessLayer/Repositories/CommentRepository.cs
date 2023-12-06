@@ -33,9 +33,25 @@ namespace DataAccessLayer.Repositories
 
         public async Task<IEnumerable<CommentDomain>> GetCommentsByMovieIdAsync(int movieId)
         {
-            return await _context.Comments.Where(c => c.MovieId == movieId).ToListAsync();
-        }
+            var commentsWithUsernames = await _context.Comments
+                .Where(c => c.MovieId == movieId)
+                .Join(_context.Users,
+                      comment => comment.AuthorId,
+                      user => user.Id,
+                      (comment, user) => new CommentDomain
+                      {
+                          // Ensure all relevant properties are mapped
+                          Id = comment.Id,
+                          AuthorId = comment.AuthorId, // Include this line
+                          MovieId = comment.MovieId,
+                          Timestamp = comment.Timestamp,
+                          Content = comment.Content,
+                          AuthorUsername = user.Username // Map the username
+                      })
+                .ToListAsync();
 
+            return commentsWithUsernames;
+        }
         public async Task<IEnumerable<CommentDomain>> GetCommentsByUserIdAsync(string userId)
         {
             return await _context.Comments.Where(c => c.AuthorId == userId).ToListAsync();

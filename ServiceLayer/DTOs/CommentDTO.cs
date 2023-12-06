@@ -9,5 +9,7 @@ namespace ServiceLayer.DTOs
         public DateTime Timestamp { get; set; }
         public string Content { get; set; }
         public List<string> LikedBy { get; set; }
+
+        public string AuthorUsername { get; set; }
     }
 }

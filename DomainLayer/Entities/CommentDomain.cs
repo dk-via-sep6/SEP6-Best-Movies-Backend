@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace DomainLayer.Entities
 {
     public class CommentDomain
@@ -13,5 +8,6 @@ namespace DomainLayer.Entities
         public int MovieId { get; set; } // ID of the movie the comment is related to
         public DateTime Timestamp { get; set; } // Timestamp of the comment
         public string Content { get; set; }
+        public List<string> LikedBy { get; set; } =new List<string>();
     }
 }

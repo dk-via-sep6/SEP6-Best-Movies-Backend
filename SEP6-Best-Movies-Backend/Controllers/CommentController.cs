@@ -27,7 +27,8 @@ namespace SEP6_Best_Movies_Backend.Controllers
                 AuthorId = commentDto.AuthorId,
                 MovieId = commentDto.MovieId,
                 Timestamp = commentDto.Timestamp,
-                Content = commentDto.Content
+                Content = commentDto.Content,
+                LikedBy=commentDto.LikedBy,
             };
             var createdComment = await _commentDataService.CreateCommentAsync(comment);
 
@@ -38,7 +39,8 @@ namespace SEP6_Best_Movies_Backend.Controllers
                 AuthorId = createdComment.AuthorId,
                 MovieId = createdComment.MovieId,
                 Timestamp = createdComment.Timestamp,
-                Content = createdComment.Content
+                Content = createdComment.Content,
+                LikedBy=createdComment.LikedBy
             };
             return CreatedAtAction(nameof(GetComment), new { id = createdComment.Id }, createdCommentDto);
         }
@@ -59,7 +61,8 @@ namespace SEP6_Best_Movies_Backend.Controllers
                 AuthorId = comment.AuthorId,
                 MovieId = comment.MovieId,
                 Timestamp = comment.Timestamp,
-                Content = comment.Content
+                Content = comment.Content,
+                LikedBy=comment.LikedBy
             };
             return Ok(commentDto);
         }
@@ -76,7 +79,8 @@ namespace SEP6_Best_Movies_Backend.Controllers
                 AuthorId = c.AuthorId,
                 MovieId = c.MovieId,
                 Timestamp = c.Timestamp,
-                Content = c.Content
+                Content = c.Content,
+                LikedBy=c.LikedBy
             }).ToList();
 
             return Ok(commentDtos);
@@ -94,7 +98,8 @@ namespace SEP6_Best_Movies_Backend.Controllers
                 AuthorId = c.AuthorId,
                 MovieId = c.MovieId,
                 Timestamp = c.Timestamp,
-                Content = c.Content
+                Content = c.Content,
+                LikedBy = c.LikedBy
             }).ToList();
 
             return Ok(commentDtos);
@@ -115,11 +120,47 @@ namespace SEP6_Best_Movies_Backend.Controllers
             commentToUpdate.MovieId = commentDto.MovieId;
             commentToUpdate.Timestamp = commentDto.Timestamp;
             commentToUpdate.Content = commentDto.Content;
-
+            commentToUpdate.LikedBy=commentDto.LikedBy;
             await _commentDataService.UpdateCommentAsync(commentToUpdate);
             return NoContent();
         }
 
+        [HttpPut("{id}/like")]
+        public async Task<IActionResult> LikeComment(int id, [FromBody] string userId)
+        {
+            var comment = await _commentDataService.GetCommentByIdAsync(id);
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
+            if (!comment.LikedBy.Contains(userId))
+            {
+                comment.LikedBy.Add(userId);
+                await _commentDataService.UpdateCommentAsync(comment);
+            }
+
+            return NoContent();
+        }
+
+        // PUT: api/comments/{id}/unlike
+        [HttpPut("{id}/unlike")]
+        public async Task<IActionResult> UnlikeComment(int id, [FromBody] string userId)
+        {
+            var comment = await _commentDataService.GetCommentByIdAsync(id);
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
+            if (comment.LikedBy.Contains(userId))
+            {
+                comment.LikedBy.Remove(userId);
+                await _commentDataService.UpdateCommentAsync(comment);
+            }
+
+            return NoContent();
+        }
         // DELETE: api/comments/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteComment(int id)
@@ -133,5 +174,7 @@ namespace SEP6_Best_Movies_Backend.Controllers
             await _commentDataService.DeleteCommentAsync(id);
             return NoContent();
         }
+
     }
+
 }

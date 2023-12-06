@@ -1,6 +1,7 @@
 using AutoMapper;
 using DataAccessLayer.DbContextFolder;
 using DataAccessLayer.Interfaces;
+using DataAccessLayer.Repositories;
 using DataAccessLayer.Repository;
 using DM.MovieApi.MovieDb.Genres;
 using DM.MovieApi.MovieDb.Movies;
@@ -12,7 +13,7 @@ using ServiceLayer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+// AutoMapper Configuration
 var config = new MapperConfiguration(cfg =>
 {
     cfg.CreateMap<MovieDomain, MovieDTO>();
@@ -29,24 +30,15 @@ var config = new MapperConfiguration(cfg =>
     cfg.CreateMap<UserDTO, UserDomain>();
     cfg.CreateMap<UserDomain, UserDTO>();
 
-    // Add other mappings here
+    // Add mappings for Comment
+    cfg.CreateMap<CommentDomain, CommentDTO>();
+    cfg.CreateMap<CommentDTO, CommentDomain>();
 });
 IMapper mapper = config.CreateMapper();
 
 builder.Services.AddSingleton(mapper);
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowSpecificOrigin",
-        builder =>
-        {
-            builder.WithOrigins("http://localhost:3000") // Replace with the actual origin of your frontend app
-                   .AllowAnyHeader()
-                   .AllowAnyMethod();
-        });
-});
 // Add services to the container.
-
 builder.Services.AddControllers();
 
 var bearerToken = builder.Configuration["MovieApi:BearerToken"];
@@ -59,19 +51,32 @@ builder.Services.AddScoped<IPeopleDataService, PeopleDataService>();
 builder.Services.AddScoped<IUserDataService, UserDataService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+// Register Comment related services
+builder.Services.AddScoped<ICommentDataService, CommentDataService>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// CORS Policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:3000") // Replace with the actual origin of your frontend app
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
+// Swagger/OpenAPI configuration
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
-        connectionString, // Use the connectionString variable directly
-        x => x.MigrationsAssembly("DataAccessLayer") // Specify the migrations assembly here
+        connectionString,
+        x => x.MigrationsAssembly("DataAccessLayer")
     ));
-
 
 var app = builder.Build();
 
@@ -82,8 +87,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors("AllowSpecificOrigin");
-
-
 
 app.UseHttpsRedirection();
 

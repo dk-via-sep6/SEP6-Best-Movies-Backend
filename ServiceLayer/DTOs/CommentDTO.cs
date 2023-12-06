@@ -8,5 +8,6 @@ namespace ServiceLayer.DTOs
         public int MovieId { get; set; }
         public DateTime Timestamp { get; set; }
         public string Content { get; set; }
+        public List<string> LikedBy { get; set; }
     }
 }

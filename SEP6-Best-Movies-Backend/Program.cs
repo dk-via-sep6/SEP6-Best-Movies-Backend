@@ -37,6 +37,13 @@ var config = new MapperConfiguration(cfg =>
     //Person Mappings
     cfg.CreateMap<Person, PersonDomain>();
     cfg.CreateMap<PersonDomain, PersonDTO>();
+    cfg.CreateMap<PersonMovieCredit, PersonMovieCreditDomain>();
+    cfg.CreateMap<PersonMovieCreditDomain, PersonMovieCreditDTO>();
+    cfg.CreateMap<PersonMovieCastMember, PersonMovieCastMemberDomain>();
+    cfg.CreateMap<PersonMovieCastMemberDomain, PersonMovieCastMemberDTO>();
+    cfg.CreateMap<PersonMovieCrewMember, PersonMovieCrewMemberDomain>();
+    cfg.CreateMap<PersonMovieCrewMemberDomain, PersonMovieCrewMemberDTO>();
+
 
     // Add other mappings here
 });

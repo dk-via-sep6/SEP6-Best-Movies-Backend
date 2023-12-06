@@ -23,6 +23,7 @@ namespace SEP6_Best_Movies_Backend.Controllers
             {
                 return NotFound();
             }
+            await Console.Out.WriteLineAsync("PersonContoller --> Found Person by ID: " + person.Id);
             return Ok(person);
         }
 
@@ -47,6 +48,7 @@ namespace SEP6_Best_Movies_Backend.Controllers
             {
                 return NotFound();
             }
+            await Console.Out.WriteLineAsync("PersonContoller --> Found Person Movie Credits by ID: " + personId);
             return Ok(personMovieCredit);
         }
 

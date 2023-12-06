@@ -7,7 +7,7 @@ namespace ServiceLayer.Interfaces
     {
         Task<PersonDTO> FindByIdAsync(int personId);
         Task<List<PersonInfoDomain>> SearchByNameAsync(string name);
-        Task<PersonMovieCreditDomain> GetMovieCreditsAsync(int personId);
+        Task<PersonMovieCreditDTO> GetMovieCreditsAsync(int personId);
         Task<PersonTVCreditDomain> GetTVCreditsAsync(int personId);
     }
 }

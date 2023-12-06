@@ -29,10 +29,10 @@ var config = new MapperConfiguration(cfg =>
     cfg.CreateMap<MovieCrewMemberDomain, MovieCrewMemberDTO>();
     cfg.CreateMap<UserDTO, UserDomain>();
     cfg.CreateMap<UserDomain, UserDTO>();
-
-    // Add mappings for Comment
     cfg.CreateMap<CommentDomain, CommentDTO>();
     cfg.CreateMap<CommentDTO, CommentDomain>();
+    cfg.CreateMap<RatingDomain, RatingDTO>();
+    cfg.CreateMap<RatingDTO,RatingDomain>();
 });
 IMapper mapper = config.CreateMapper();
 
@@ -54,6 +54,9 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 // Register Comment related services
 builder.Services.AddScoped<ICommentDataService, CommentDataService>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+
+builder.Services.AddScoped<IRatingDataService, RatingDataService>();
+builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 
 // CORS Policy
 builder.Services.AddCors(options =>

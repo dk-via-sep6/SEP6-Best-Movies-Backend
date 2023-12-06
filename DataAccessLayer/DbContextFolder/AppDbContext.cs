@@ -49,9 +49,21 @@ namespace DataAccessLayer.DbContextFolder
                 entity.HasOne<UserDomain>().WithMany().HasForeignKey(c => c.AuthorId);
             });
             // Configure other entities
+            modelBuilder.Entity<RatingDomain>(entity =>
+            {
+                // Define MovieId as a foreign key (shadow property)
+                entity.Property<int>("MovieId").IsRequired();
+                // Define AuthorId as a foreign key if User entity is not included in the model
+                entity.Property<string>("UserId").IsRequired();
+
+                // Optionally, if you have a User entity and want to establish the relationship
+                entity.HasOne<UserDomain>().WithMany().HasForeignKey(c => c.UserId);
+            });
         }
 
         public DbSet<UserDomain> Users { get; set; }
         public DbSet<CommentDomain> Comments { get; set; }
+
+        public DbSet<RatingDomain> MovieRatings { get; set; }
     }
 }

@@ -1,12 +1,13 @@
 ﻿using DomainLayer.Entities;
+using ServiceLayer.DTOs;
 
 namespace ServiceLayer.Interfaces
 {
-    public interface IPeopleDataService
+    public interface IPersonDataService
     {
-        Task<PersonDomain> FindByIdAsync(int personId);
+        Task<PersonDTO> FindByIdAsync(int personId);
         Task<List<PersonInfoDomain>> SearchByNameAsync(string name);
-        Task<PersonMovieCreditDomain> GetMovieCreditsAsync(int personId);
+        Task<PersonMovieCreditDTO> GetMovieCreditsAsync(int personId);
         Task<PersonTVCreditDomain> GetTVCreditsAsync(int personId);
     }
 }

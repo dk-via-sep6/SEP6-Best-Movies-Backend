@@ -8,7 +8,7 @@ namespace ServiceLayer.Services
     public class MovieDataService : IMovieDataService
     {
         private readonly IMapper _mapper;
-        private ITheMovieDbWrapperMovieService _movieService;
+        private readonly ITheMovieDbWrapperMovieService _movieService;
         public MovieDataService(IMapper mapper, ITheMovieDbWrapperMovieService movieService)
         {
             _mapper = mapper;

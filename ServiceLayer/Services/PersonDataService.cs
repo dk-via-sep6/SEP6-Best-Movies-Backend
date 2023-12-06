@@ -1,25 +1,31 @@
-﻿using DomainLayer.Entities;
+﻿using AutoMapper;
+using DomainLayer.Entities;
 using DomainLayer.Enums;
+using ServiceLayer.DTOs;
 using ServiceLayer.Interfaces;
 
 namespace ServiceLayer.Services
 {
-    public class PeopleDataService : IPeopleDataService
+    public class PersonDataService : IPersonDataService
     {
-        private ITheMovieDbWrapperPeopleService _peopleService;
-        public PeopleDataService(ITheMovieDbWrapperPeopleService peopleService)
+        private readonly IMapper _mapper;
+        private readonly ITheMovieDbWrapperPersonService _peopleService;
+        public PersonDataService(IMapper mapper, ITheMovieDbWrapperPersonService peopleService)
         {
+            _mapper = mapper;
             _peopleService = peopleService;
         }
-        public async Task<PersonDomain> FindByIdAsync(int personId)
+        public async Task<PersonDTO> FindByIdAsync(int personId)
         {
             var personData = await _peopleService.FindByIdAsync(personId);
-            return MapToDomainPerson(personData);
+            var domainPerson = _mapper.Map<PersonDomain>(personData);
+            return _mapper.Map<PersonDTO>(domainPerson);
         }
-        public async Task<PersonMovieCreditDomain> GetMovieCreditsAsync(int personId)
+        public async Task<PersonMovieCreditDTO> GetMovieCreditsAsync(int personId)
         {
             var personData = await _peopleService.GetMovieCreditsAsync(personId);
-            return MapToDomainPersonMovieCredit(personData);
+            var domainPerson = _mapper.Map<PersonMovieCreditDomain>(personData);
+            return _mapper.Map<PersonMovieCreditDTO>(domainPerson);
         }
         public async Task<PersonTVCreditDomain> GetTVCreditsAsync(int personId)
         {
@@ -31,33 +37,7 @@ namespace ServiceLayer.Services
             var apiResponse = await _peopleService.SearchByNameAsync(name);
             return apiResponse.Select(MapToDomainPersonInfo).ToList();
         }
-        private PersonDomain MapToDomainPerson(DM.MovieApi.MovieDb.People.Person personData)
-        {
-            return new PersonDomain
-            {
-                Id = personData.Id,
-                Name = personData.Name,
-                AlsoKnownAs = personData.AlsoKnownAs,
-                Biography = personData.Biography,
-                Birthday = personData.Birthday,
-                Deathday = personData.Deathday,
-                Gender = MapToDomainGender(personData.Gender),
-                Homepage = personData.Homepage,
-                ImdbId = personData.ImdbId,
-                PlaceOfBirth = personData.PlaceOfBirth,
-                Popularity = personData.Popularity,
-                ProfilePath = personData.ProfilePath,
-            };
-        }
-        private PersonMovieCreditDomain MapToDomainPersonMovieCredit(DM.MovieApi.MovieDb.People.PersonMovieCredit personData)
-        {
-            return new PersonMovieCreditDomain
-            {
-                PersonId = personData.PersonId,
-                CastRoles = MapToDomainPersonMovieCastMember(personData.CastRoles),
-                CrewRoles = MapToDomainPersonMovieCrewMember(personData.CrewRoles),
-            };
-        }
+
         private PersonTVCreditDomain MapToDomainPersonTVCredit(DM.MovieApi.MovieDb.People.PersonTVCredit personData)
         {
             return new PersonTVCreditDomain
@@ -80,18 +60,6 @@ namespace ServiceLayer.Services
                 Popularity = apiPersonInfo.Popularity
             };
         }
-        private GenderDomain MapToDomainGender(DM.MovieApi.MovieDb.People.Gender apiGender)
-        {
-            switch (apiGender)
-            {
-                case DM.MovieApi.MovieDb.People.Gender.Male:
-                    return GenderDomain.Male;
-                case DM.MovieApi.MovieDb.People.Gender.Female:
-                    return GenderDomain.Female;
-                default:
-                    return GenderDomain.Unknown;
-            }
-        }
         private MediaTypeDomain MapToDomainMediaType(DM.MovieApi.MovieDb.People.MediaType apiMediaType)
         {
             switch (apiMediaType)
@@ -105,37 +73,7 @@ namespace ServiceLayer.Services
 
             }
         }
-        private IReadOnlyList<PersonMovieCastMemberDomain> MapToDomainPersonMovieCastMember(IReadOnlyList<DM.MovieApi.MovieDb.People.PersonMovieCastMember> personData)
-        {
-            return personData.Select(m => new PersonMovieCastMemberDomain
-            {
-                MovieId = m.MovieId,
-                IsAdultThemed = m.IsAdultThemed,
-                Character = m.Character,
-                CreditId = m.CreditId,
-                OriginalTitle = m.OriginalTitle,
-                PosterPath = m.PosterPath,
-                ReleaseDate = m.ReleaseDate,
-                Title = m.Title
-            }).ToList();
 
-        }
-        private IReadOnlyList<PersonMovieCrewMemberDomain> MapToDomainPersonMovieCrewMember(IReadOnlyList<DM.MovieApi.MovieDb.People.PersonMovieCrewMember> personData)
-        {
-            return personData.Select(c => new PersonMovieCrewMemberDomain
-            {
-                MovieId = c.MovieId,
-                IsAdultThemed = c.IsAdultThemed,
-                CreditId = c.CreditId,
-                Department = c.Department,
-                Job = c.Job,
-                OriginalTitle = c.OriginalTitle,
-                PosterPath = c.PosterPath,
-                ReleaseDate = c.ReleaseDate,
-                Title = c.Title
-            }).ToList();
-
-        }
         private IReadOnlyList<PersonTVCastMemberDomain> MaptoDomainPersonTvCastMember(IReadOnlyList<DM.MovieApi.MovieDb.People.PersonTVCastMember> personData)
         {
             return personData.Select(m => new PersonTVCastMemberDomain

@@ -30,6 +30,7 @@ var config = new MapperConfiguration(cfg =>
     cfg.CreateMap<MovieCrewMember, MovieCrewMemberDomain>();
     cfg.CreateMap<MovieCrewMemberDomain, MovieCrewMemberDTO>();
 
+
     //User Mappings
     cfg.CreateMap<UserDTO, UserDomain>();
     cfg.CreateMap<UserDomain, UserDTO>();
@@ -44,11 +45,16 @@ var config = new MapperConfiguration(cfg =>
     cfg.CreateMap<PersonMovieCastMemberDomain, PersonMovieCastMemberDTO>();
     cfg.CreateMap<PersonMovieCrewMember, PersonMovieCrewMemberDomain>();
     cfg.CreateMap<PersonMovieCrewMemberDomain, PersonMovieCrewMemberDTO>();
+    cfg.CreateMap<PersonInfo, PersonInfoDomain>();
+    cfg.CreateMap<PersonInfoDomain, PersonInfoDTO>();
+    cfg.CreateMap<PersonInfoRole, PersonInfoRoleDomain>();
+    cfg.CreateMap<PersonInfoRoleDomain, PersonInfoRoleDTO>();
 
     cfg.CreateMap<CommentDomain, CommentDTO>();
     cfg.CreateMap<CommentDTO, CommentDomain>();
 
     cfg.CreateMap<RatingDomain, RatingDTO>();
+    cfg.CreateMap<RatingDTO, RatingDomain>();
     cfg.CreateMap<RatingDTO,RatingDomain>();
 
     cfg.CreateMap<WatchlistDomain, WatchlistDTO>();

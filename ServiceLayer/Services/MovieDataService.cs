@@ -27,8 +27,60 @@ namespace ServiceLayer.Services
             var movieData = await _movieService.SearchByTitleAsync(title);
             var domainObject = _mapper.Map<List<MovieInfoDomain>>(movieData);
 
-            return _mapper.Map<List<MovieDTO>>(domainObject);
+            // Assuming you have a way to calculate the mean vote (C)
+            double meanVote = CalculateMeanVote(domainObject);
+
+            // Define the minimum number of votes required (m)
+            // You can adjust this based on your data
+            int minVoteCount = CalculateMinVoteCount(domainObject);
+
+            var movieDTOs = _mapper.Map<List<MovieDTO>>(domainObject);
+
+            // Calculate weighted ratings and sort
+            foreach (var movie in movieDTOs)
+            {
+                movie.WeightedRating = CalculateWeightedRating(movie.VoteCount, movie.VoteAverage, minVoteCount, meanVote);
+            }
+
+            return movieDTOs.OrderByDescending(m => m.WeightedRating).ToList();
         }
+
+        private double CalculateWeightedRating(int voteCount, double voteAverage, int minVoteCount, double meanVote)
+        {
+            return (voteCount / (double)(voteCount + minVoteCount) * voteAverage) + (minVoteCount / (double)(voteCount + minVoteCount) * meanVote);
+        }
+
+
+        private double CalculateMeanVote(List<MovieInfoDomain> movies)
+        {
+            if (movies == null || movies.Count == 0)
+                return 0;
+
+            double totalVotes = 0;
+            double totalVoteCount = 0;
+
+            foreach (var movie in movies)
+            {
+                totalVotes += movie.VoteAverage * movie.VoteCount;
+                totalVoteCount += movie.VoteCount;
+            }
+
+            return totalVoteCount > 0 ? totalVotes / totalVoteCount : 0;
+        }
+
+        private int CalculateMinVoteCount(List<MovieInfoDomain> movies)
+        {
+            if (movies == null || movies.Count == 0)
+                return 0;
+
+            var voteCounts = movies.Select(m => m.VoteCount).OrderByDescending(v => v).ToList();
+            int position = (int)(voteCounts.Count * 0.05); // Top 5%
+            position = Math.Max(0, Math.Min(position, voteCounts.Count - 1)); // Ensure position is within the list bounds
+
+            return voteCounts[position];
+        }
+
+
         public async Task<MovieDTO> GetLatestAsync()
         {
             var movieData = await _movieService.GetLatestAsync();
@@ -88,38 +140,6 @@ namespace ServiceLayer.Services
             return moviesData.Select(MapToDomainMovieInfo).ToList();
         }
 
-        private MovieDomain MapToDomainMovie(DM.MovieApi.MovieDb.Movies.Movie movieData)
-        {
-            return new MovieDomain
-            {
-                Id = movieData.Id,
-                Title = movieData.Title,
-                Overview = movieData.Overview,
-                ReleaseDate = movieData.ReleaseDate,
-                PosterPath = movieData.PosterPath,
-                IsAdultThemed = movieData.IsAdultThemed,
-                BackdropPath = movieData.BackdropPath,
-                MovieCollectionInfo = movieData.MovieCollectionInfo,
-                Budget = movieData.Budget,
-                Genres = MapToDomainGenres(movieData.Genres),
-                Homepage = movieData.Homepage,
-                ImdbId = movieData.ImdbId,
-                OriginalLanguage = movieData.OriginalLanguage,
-                OriginalTitle = movieData.OriginalTitle,
-                Popularity = movieData.Popularity,
-                ProductionCompanies = movieData.ProductionCompanies,
-                ProductionCountries = movieData.ProductionCountries,
-                Revenue = movieData.Revenue,
-                Runtime = movieData.Runtime,
-                SpokenLanguages = movieData.SpokenLanguages,
-                Status = movieData.Status,
-                Tagline = movieData.Tagline,
-                IsVideo = movieData.IsVideo,
-                VoteAverage = movieData.VoteAverage,
-                VoteCount = movieData.VoteCount,
-                Keywords = movieData.Keywords
-            };
-        }
 
         private MovieInfoDomain MapToDomainMovieInfo(DM.MovieApi.MovieDb.Movies.MovieInfo movieData)
         {
@@ -147,47 +167,6 @@ namespace ServiceLayer.Services
             {
                 Id = g.Id,
                 Name = g.Name
-            }).ToList();
-        }
-
-
-        private MovieCreditDomain MapToDomainMovieCredit(DM.MovieApi.MovieDb.Movies.MovieCredit apiMovieCredit)
-        {
-            var domainMovieCredit = new MovieCreditDomain
-            {
-                MovieId = apiMovieCredit.MovieId,
-                CastMembers = MapCastMembers(apiMovieCredit.CastMembers),
-                CrewMembers = MapCrewMembers(apiMovieCredit.CrewMembers)
-            };
-
-            return domainMovieCredit;
-        }
-
-        private IReadOnlyList<MovieCastMemberDomain> MapCastMembers(IReadOnlyList<DM.MovieApi.MovieDb.Movies.MovieCastMember> apiCastMembers)
-        {
-            return apiCastMembers.Select(c => new MovieCastMemberDomain
-            {
-                PersonId = c.PersonId,
-                CastId = c.CastId,
-                CreditId = c.CreditId,
-                Character = c.Character,
-                Name = c.Name,
-                Order = c.Order,
-                ProfilePath = c.ProfilePath
-            }).ToList();
-        }
-
-
-        private IReadOnlyList<MovieCrewMemberDomain> MapCrewMembers(IReadOnlyList<DM.MovieApi.MovieDb.Movies.MovieCrewMember> apiCrewMembers)
-        {
-            return apiCrewMembers.Select(c => new MovieCrewMemberDomain
-            {
-                PersonId = c.PersonId,
-                CreditId = c.CreditId,
-                Department = c.Department,
-                Job = c.Job,
-                Name = c.Name,
-                ProfilePath = c.ProfilePath
             }).ToList();
         }
     }

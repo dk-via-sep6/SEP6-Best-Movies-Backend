@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.DTOs;
 using ServiceLayer.Interfaces;
+using ServiceLayer.Services;
 // ... other necessary using directives
 
 [ApiController]
@@ -121,4 +122,22 @@ public class RatingsController : ControllerBase
 
         return Ok(ratingDtos);
     }
+    
+    [HttpGet("user/{userId}/movie/{movieId}")]
+public async Task<ActionResult<RatingDTO>> GetUserRatingForMovie(string userId, int movieId)
+{
+    var rating = await _ratingDataService.GetRatingByUserAndMovieAsync(userId, movieId);
+    if (rating == null)
+    {
+        return NotFound();
+    }
+    var ratingDto = new RatingDTO
+    {
+        Id = rating.Id,
+        UserId = rating.UserId,
+        MovieId = rating.MovieId,
+        Rating = rating.Rating
+    };
+    return Ok(ratingDto);
+}
 }

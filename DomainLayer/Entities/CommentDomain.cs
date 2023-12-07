@@ -1,4 +1,6 @@
 ﻿
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace DomainLayer.Entities
 {
     public class CommentDomain
@@ -9,5 +11,7 @@ namespace DomainLayer.Entities
         public DateTime Timestamp { get; set; } // Timestamp of the comment
         public string Content { get; set; }
         public List<string> LikedBy { get; set; } =new List<string>();
+        [NotMapped]
+        public string AuthorUsername { get; set; }
     }
 }

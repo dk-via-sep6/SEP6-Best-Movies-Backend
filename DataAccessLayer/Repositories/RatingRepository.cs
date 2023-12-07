@@ -59,6 +59,11 @@ namespace DataAccessLayer.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task<RatingDomain> GetRatingByUserAndMovieAsync(string userId, int movieId)
+        {
+            return await _context.MovieRatings.FirstOrDefaultAsync(r => r.UserId == userId && r.MovieId == movieId);
+        }
 
+       
     }
 }

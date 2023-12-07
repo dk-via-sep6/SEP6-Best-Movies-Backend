@@ -50,12 +50,15 @@ var config = new MapperConfiguration(cfg =>
     cfg.CreateMap<PersonInfoRole, PersonInfoRoleDomain>();
     cfg.CreateMap<PersonInfoRoleDomain, PersonInfoRoleDTO>();
 
-
-    // Add other mappings here
     cfg.CreateMap<CommentDomain, CommentDTO>();
     cfg.CreateMap<CommentDTO, CommentDomain>();
+
     cfg.CreateMap<RatingDomain, RatingDTO>();
     cfg.CreateMap<RatingDTO, RatingDomain>();
+    cfg.CreateMap<RatingDTO,RatingDomain>();
+
+    cfg.CreateMap<WatchlistDomain, WatchlistDTO>();
+    cfg.CreateMap<WatchlistDTO, WatchlistDomain>();
 });
 IMapper mapper = config.CreateMapper();
 
@@ -91,6 +94,8 @@ builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<IRatingDataService, RatingDataService>();
 builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 
+builder.Services.AddScoped<IWatchlistDataService, WatchlistDataService>();
+builder.Services.AddScoped<IWatchlistRepository, WatchlistRepository>();
 // CORS Policy
 builder.Services.AddCors(options =>
 {

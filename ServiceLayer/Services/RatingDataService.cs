@@ -46,5 +46,10 @@ namespace ServiceLayer.Services
         {
             await _ratingRepository.DeleteRatingAsync(id);
         }
+        public async Task<RatingDomain> GetRatingByUserAndMovieAsync(string userId, int movieId)
+        {
+            return await _ratingRepository.GetRatingByUserAndMovieAsync(userId, movieId);
+        }
+
     }
 }

@@ -59,11 +59,33 @@ namespace DataAccessLayer.DbContextFolder
                 // Optionally, if you have a User entity and want to establish the relationship
                 entity.HasOne<UserDomain>().WithMany().HasForeignKey(c => c.UserId);
             });
+            modelBuilder.Entity<WatchlistDomain>(entity =>
+            {
+                entity.HasKey(w => w.Id);
+
+                // Assuming Id is an integer and auto-generated
+                entity.Property(w => w.Id).ValueGeneratedOnAdd();
+
+                // Configuring Name
+                entity.Property(w => w.Name)
+                      .IsRequired()
+                      .HasMaxLength(100); // Adjust max length as needed
+
+                // Define UserId as a foreign key
+                entity.Property<string>("UserId").IsRequired();
+
+                // Configure the relationship with UserDomain if User entity is included
+                entity.HasOne<UserDomain>().WithMany().HasForeignKey(w => w.UserId);
+
+
+            });
+
         }
 
         public DbSet<UserDomain> Users { get; set; }
         public DbSet<CommentDomain> Comments { get; set; }
 
         public DbSet<RatingDomain> MovieRatings { get; set; }
+        public DbSet<WatchlistDomain> Watchlists { get; set; }
     }
 }

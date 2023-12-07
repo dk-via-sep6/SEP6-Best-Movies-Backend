@@ -11,5 +11,6 @@ namespace ServiceLayer.Interfaces
         Task<IEnumerable<RatingDomain>> GetRatingsByUserIdAsync(string userId);
         Task UpdateRatingAsync(RatingDomain rating);
         Task DeleteRatingAsync(int id);
+        Task<RatingDomain> GetRatingByUserAndMovieAsync(string userId, int movieId);
     }
 }

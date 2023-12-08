@@ -27,7 +27,7 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_c38761bae3e04b3e80ea837d09a406d4 }}/christophergadgaard/sep6bestmoviesbackend:${{ github.sha }}
+        tags: index.docker.io/christophergadgaard/sep6bestmoviesbackend:${{ github.sha }}
         file: ./SEP6-Best-Movies-Backend/Dockerfile
 
   deploy:

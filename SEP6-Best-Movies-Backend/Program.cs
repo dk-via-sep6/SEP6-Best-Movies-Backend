@@ -55,7 +55,7 @@ var config = new MapperConfiguration(cfg =>
 
     cfg.CreateMap<RatingDomain, RatingDTO>();
     cfg.CreateMap<RatingDTO, RatingDomain>();
-    cfg.CreateMap<RatingDTO,RatingDomain>();
+    cfg.CreateMap<RatingDTO, RatingDomain>();
 
     cfg.CreateMap<WatchlistDomain, WatchlistDTO>();
     cfg.CreateMap<WatchlistDTO, WatchlistDomain>();
@@ -121,12 +121,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseCors("AllowSpecificOrigin");
 
 app.UseHttpsRedirection();

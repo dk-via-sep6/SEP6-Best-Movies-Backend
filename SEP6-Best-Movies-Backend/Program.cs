@@ -64,16 +64,6 @@ IMapper mapper = config.CreateMapper();
 
 builder.Services.AddSingleton(mapper);
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowSpecificOrigin",
-        builder =>
-        {
-            builder.WithOrigins("http://localhost:3000")
-                   .AllowAnyHeader()
-                   .AllowAnyMethod();
-        });
-});
 // Add services to the container.
 builder.Services.AddControllers();
 

@@ -92,7 +92,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigin",
         builder =>
         {
-            builder.WithOrigins("http://localhost:3000") // Replace with the actual origin of your frontend app
+            builder.WithOrigins("https://sep6-best-movies.azurewebsites.net/") // Replace with the actual origin of your frontend app
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });

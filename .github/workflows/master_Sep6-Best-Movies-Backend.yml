@@ -31,7 +31,7 @@ jobs:
       with:
         push: true
         tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_254bdc2358074468962265687c94d4e6 }}/sep6bestmoviesbackend:${{ github.sha }}
-        file: ./Dockerfile
+        file: ./SEP6-Best-Movies-Backend/Dockerfile
 
   deploy:
     runs-on: ubuntu-latest

@@ -86,6 +86,7 @@ builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 
 builder.Services.AddScoped<IWatchlistDataService, WatchlistDataService>();
 builder.Services.AddScoped<IWatchlistRepository, WatchlistRepository>();
+
 // CORS Policy
 builder.Services.AddCors(options =>
 {

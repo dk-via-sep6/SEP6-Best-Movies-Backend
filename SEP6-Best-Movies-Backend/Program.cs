@@ -150,18 +150,17 @@ var app = builder.Build();
 
 app.UseMiddleware<ApiKeyMiddleware>();
 
-if (!app.Environment.IsDevelopment())
-{var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+//if (!app.Environment.IsDevelopment())
+//{
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 builder.WebHost.UseUrls($"http://*:{port}");
+//}
 
-
-}
-
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 
 app.UseCors("AllowSpecificOrigin");

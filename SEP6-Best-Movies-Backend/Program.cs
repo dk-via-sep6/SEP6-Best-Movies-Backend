@@ -8,6 +8,7 @@ using DM.MovieApi.MovieDb.Movies;
 using DM.MovieApi.MovieDb.People;
 using DomainLayer.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using ServiceLayer.DTOs;
 using ServiceLayer.Interfaces;
 using ServiceLayer.Services;
@@ -71,6 +72,8 @@ var bearerToken = builder.Configuration["MovieApi:BearerToken"];
 builder.Services.AddSingleton<ITheMovieDbWrapperMovieService>(_ => new TheMovieDbWrapperMovieService(bearerToken));
 builder.Services.AddSingleton<ITheMovieDbWrapperPersonService>(_ => new TheMovieDbWrapperPersonService(bearerToken));
 
+
+
 // Register your MovieDataService
 builder.Services.AddScoped<IMovieDataService, MovieDataService>();
 builder.Services.AddScoped<IPersonDataService, PersonDataService>();
@@ -101,13 +104,39 @@ builder.Services.AddCors(options =>
 });
 
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-builder.WebHost.UseUrls($"http://*:{port}");
 
 
 // Swagger/OpenAPI configuration
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+    {
+        Description = "API Key needed to access the endpoints",
+        In = ParameterLocation.Header,
+        Name = "API-Key", 
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "ApiKeyScheme"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "ApiKey"
+                },
+                Scheme = "ApiKeyScheme",
+                Name = "ApiKey",
+                In = ParameterLocation.Header,
+            },
+            new List<string>() // List of scopes - not needed for API Key
+        }
+    });
+});
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -119,8 +148,21 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 var app = builder.Build();
 
 
-app.UseSwagger();
-app.UseSwaggerUI();
+app.UseMiddleware<ApiKeyMiddleware>();
+
+if (!app.Environment.IsDevelopment())
+{var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://*:{port}");
+
+
+}
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 
 app.UseCors("AllowSpecificOrigin");
 

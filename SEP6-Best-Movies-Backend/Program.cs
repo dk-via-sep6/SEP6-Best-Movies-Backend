@@ -89,17 +89,17 @@ builder.Services.AddScoped<IWatchlistRepository, WatchlistRepository>();
 
 // CORS Policy
 
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
         builder =>
         {
-            builder.WithOrigins("https://sep6-best-movies.azurewebsites.net/") // Replace with the actual origin of your frontend app
+            builder.WithOrigins("https://sep6-best-movies-frontend.azurewebsites.net") // Replace with the actual origin of your frontend app
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });
 });
+
 
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 builder.WebHost.UseUrls($"http://*:{port}");

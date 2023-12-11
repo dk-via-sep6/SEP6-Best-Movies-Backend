@@ -72,7 +72,7 @@ namespace SEP6_Best_Movies_Backend.Controllers
             if (trendingPeople == null)
             {
                 await Console.Out.WriteLineAsync("PersonContoller --> Sent TrendingPeople");
-                return NotFound("hello");
+                return NotFound();
             }
             await Console.Out.WriteLineAsync("PersonContoller --> Sent TrendingPeople");
             return Ok(trendingPeople);

@@ -50,14 +50,21 @@ var config = new MapperConfiguration(cfg =>
     cfg.CreateMap<PersonInfoDomain, PersonInfoDTO>();
     cfg.CreateMap<PersonInfoRole, PersonInfoRoleDomain>();
     cfg.CreateMap<PersonInfoRoleDomain, PersonInfoRoleDTO>();
+    cfg.CreateMap<PeopleDomain, PeopleDTO>();
+    cfg.CreateMap<PersonResultDomain, PersonResultDTO>();
+    cfg.CreateMap<KnownForDomain, KnownForDTO>();
 
+
+    //Comment Mappings
     cfg.CreateMap<CommentDomain, CommentDTO>();
     cfg.CreateMap<CommentDTO, CommentDomain>();
 
+    //Rating Mappings
     cfg.CreateMap<RatingDomain, RatingDTO>();
     cfg.CreateMap<RatingDTO, RatingDomain>();
     cfg.CreateMap<RatingDTO, RatingDomain>();
 
+    //Watchlist mappings
     cfg.CreateMap<WatchlistDomain, WatchlistDTO>();
     cfg.CreateMap<WatchlistDTO, WatchlistDomain>();
 });
@@ -72,6 +79,12 @@ var bearerToken = builder.Configuration["MovieApi:BearerToken"];
 builder.Services.AddSingleton<ITheMovieDbWrapperMovieService>(_ => new TheMovieDbWrapperMovieService(bearerToken));
 builder.Services.AddSingleton<ITheMovieDbWrapperPersonService>(_ => new TheMovieDbWrapperPersonService(bearerToken));
 
+builder.Services.AddHttpClient();
+builder.Services.AddSingleton<ITMdbPeopleService>(provider =>
+{
+    var httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();
+    return new TMdbPeopleService(httpClientFactory, bearerToken);
+});
 
 
 // Register your MovieDataService
@@ -91,26 +104,17 @@ builder.Services.AddScoped<IWatchlistDataService, WatchlistDataService>();
 builder.Services.AddScoped<IWatchlistRepository, WatchlistRepository>();
 
 // CORS Policy
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
         builder =>
         {
-            builder.WithOrigins("https://sep6-best-movies-frontend.azurewebsites.net") // Replace with the actual origin of your frontend app
-                   .AllowAnyHeader()
-                   .AllowAnyMethod();
-        });
-});
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowSpecificOrigin",
-        builder =>
-        {
-            builder.WithOrigins("https://localhost:3000") // Replace with the actual origin of your frontend app
-                   .AllowAnyHeader()
-                   .AllowAnyMethod();
+            builder.WithOrigins(
+                    "https://sep6-best-movies-frontend.azurewebsites.net", // Production frontend origin
+                    "https://localhost:3000" // Development frontend origin
+                )
+                .AllowAnyHeader()
+                .AllowAnyMethod();
         });
 });
 
@@ -149,6 +153,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
@@ -156,8 +161,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         x => x.MigrationsAssembly("DataAccessLayer")
     ));
 
+
 var app = builder.Build();
 
+
+app.UseCors(policy =>
+    policy.WithOrigins("http://localhost:3000") // Replace with your front-end's actual port number
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .AllowCredentials());
 
 app.UseMiddleware<ApiKeyMiddleware>();
 
@@ -166,6 +178,8 @@ if (!app.Environment.IsDevelopment())
     var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
     builder.WebHost.UseUrls($"http://*:{port}");
 }
+
+
 
 //if (app.Environment.IsDevelopment())
 //{

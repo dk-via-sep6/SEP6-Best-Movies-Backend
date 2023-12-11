@@ -63,5 +63,19 @@ namespace SEP6_Best_Movies_Backend.Controllers
             }
             return Ok(personTVCredit);
         }
+
+        //GET: api/trending
+        [HttpGet("trending")]
+        public async Task<IActionResult> GetTrendingAsync()
+        {
+            var trendingPeople = await _personDataService.GetTrendingAsync();
+            if (trendingPeople == null)
+            {
+                await Console.Out.WriteLineAsync("PersonContoller --> Sent TrendingPeople");
+                return NotFound();
+            }
+            await Console.Out.WriteLineAsync("PersonContoller --> Sent TrendingPeople");
+            return Ok(trendingPeople);
+        }
     }
 }

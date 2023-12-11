@@ -9,32 +9,34 @@ namespace ServiceLayer.Services
     public class PersonDataService : IPersonDataService
     {
         private readonly IMapper _mapper;
-        private readonly ITheMovieDbWrapperPersonService _peopleService;
-        public PersonDataService(IMapper mapper, ITheMovieDbWrapperPersonService peopleService)
+        private readonly ITheMovieDbWrapperPersonService _peopleWrapperService;
+        private readonly ITMdbPeopleService _peopleTmtbService;
+        public PersonDataService(IMapper mapper, ITheMovieDbWrapperPersonService peopleWrapperService, ITMdbPeopleService peopleTmdbService)
         {
             _mapper = mapper;
-            _peopleService = peopleService;
+            _peopleWrapperService = peopleWrapperService;
+            _peopleTmtbService = peopleTmdbService;
         }
         public async Task<PersonDTO> FindByIdAsync(int personId)
         {
-            var personData = await _peopleService.FindByIdAsync(personId);
+            var personData = await _peopleWrapperService.FindByIdAsync(personId);
             var domainPerson = _mapper.Map<PersonDomain>(personData);
             return _mapper.Map<PersonDTO>(domainPerson);
         }
         public async Task<PersonMovieCreditDTO> GetMovieCreditsAsync(int personId)
         {
-            var personData = await _peopleService.GetMovieCreditsAsync(personId);
+            var personData = await _peopleWrapperService.GetMovieCreditsAsync(personId);
             var domainPerson = _mapper.Map<PersonMovieCreditDomain>(personData);
             return _mapper.Map<PersonMovieCreditDTO>(domainPerson);
         }
         public async Task<PersonTVCreditDomain> GetTVCreditsAsync(int personId)
         {
-            var personData = await _peopleService.GetTVCreditsAsync(personId);
+            var personData = await _peopleWrapperService.GetTVCreditsAsync(personId);
             return MapToDomainPersonTVCredit(personData);
         }
         public async Task<List<PersonInfoDTO>> SearchByNameAsync(string name)
         {
-            var personData = await _peopleService.SearchByNameAsync(name);
+            var personData = await _peopleWrapperService.SearchByNameAsync(name);
             var domainPersonInfo = _mapper.Map<List<PersonInfoDomain>>(personData);
 
             var filteredAndSortedDomainPersonInfo = domainPersonInfo
@@ -44,6 +46,42 @@ namespace ServiceLayer.Services
 
             return _mapper.Map<List<PersonInfoDTO>>(filteredAndSortedDomainPersonInfo);
         }
+        public async Task<PeopleDTO> GetTrendingAsync()
+        {
+            var personData = await _peopleTmtbService.GetTrendingAsync();
+
+            var peopleDto = new PeopleDTO
+            {
+                Page = personData.Page,
+                Total_Pages = personData.Total_Pages,
+                Total_Results = personData.Total_Results,
+                Results = personData.Results.Select(MapToPersonResultDTO).ToList()
+            };
+
+            return peopleDto;
+        }
+
+        private PersonResultDTO MapToPersonResultDTO(PersonResultDomain person)
+        {
+            var topKnownForTitles = person.Known_For
+                                        .OrderByDescending(k => k.Popularity)
+                                        .Take(3)
+                                        .Select(k => k.Title)
+                                        .ToList();
+
+
+            var combinedTitles = string.Join(", ", topKnownForTitles);
+
+            return new PersonResultDTO
+            {
+                Id = person.Id,
+                Name = person.Name,
+                Profile_Path = person.Profile_Path,
+                Popularity = person.Popularity,
+                TopKnownForTitles = combinedTitles
+            };
+        }
+
 
 
         private PersonTVCreditDomain MapToDomainPersonTVCredit(DM.MovieApi.MovieDb.People.PersonTVCredit personData)

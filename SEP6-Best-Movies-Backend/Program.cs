@@ -103,6 +103,17 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder =>
+        {
+            builder.WithOrigins("https://localhost:3000") // Replace with the actual origin of your frontend app
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
 
 
 
@@ -114,7 +125,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Description = "API Key needed to access the endpoints",
         In = ParameterLocation.Header,
-        Name = "API-Key", 
+        Name = "API-Key",
         Type = SecuritySchemeType.ApiKey,
         Scheme = "ApiKeyScheme"
     });
@@ -150,16 +161,16 @@ var app = builder.Build();
 
 app.UseMiddleware<ApiKeyMiddleware>();
 
-//if (!app.Environment.IsDevelopment())
-//{
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-builder.WebHost.UseUrls($"http://*:{port}");
-//}
+if (!app.Environment.IsDevelopment())
+{
+    var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+    builder.WebHost.UseUrls($"http://*:{port}");
+}
 
 //if (app.Environment.IsDevelopment())
 //{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseSwagger();
+app.UseSwaggerUI();
 //}
 
 

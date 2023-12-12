@@ -17,20 +17,23 @@ namespace SEP6_Best_Movies_Backend.Controllers
             _commentDataService = commentDataService;
         }
 
-        // POST: api/comments
         [HttpPost]
         public async Task<ActionResult<CommentDTO>> CreateComment([FromBody] CommentDTO commentDto)
         {
+            await Console.Out.WriteLineAsync("controller comment");
+            await Console.Out.WriteLineAsync(commentDto.ToString());
+
             var comment = new CommentDomain
             {
                 // Map properties from commentDto to CommentDomain
                 AuthorId = commentDto.AuthorId,
                 MovieId = commentDto.MovieId,
-                Timestamp = commentDto.Timestamp,
+                Timestamp = DateTime.UtcNow, // Use UTC time, or DateTime.Now for local time
                 Content = commentDto.Content,
-                LikedBy=commentDto.LikedBy,
+                LikedBy = commentDto.LikedBy,
                 AuthorUsername = commentDto.AuthorUsername
             };
+
             var createdComment = await _commentDataService.CreateCommentAsync(comment);
 
             var createdCommentDto = new CommentDTO
@@ -41,12 +44,13 @@ namespace SEP6_Best_Movies_Backend.Controllers
                 MovieId = createdComment.MovieId,
                 Timestamp = createdComment.Timestamp,
                 Content = createdComment.Content,
-                LikedBy=createdComment.LikedBy,
+                LikedBy = createdComment.LikedBy,
                 AuthorUsername = createdComment.AuthorUsername
-
             };
+
             return CreatedAtAction(nameof(GetComment), new { id = createdComment.Id }, createdCommentDto);
         }
+
 
         // GET: api/comments/{id}
         [HttpGet("{id}")]

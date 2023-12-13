@@ -47,6 +47,10 @@ namespace DataAccessLayer.DbContextFolder
 
                 // Optionally, if you have a User entity and want to establish the relationship
                 entity.HasOne<UserDomain>().WithMany().HasForeignKey(c => c.AuthorId);
+                entity.Property<string>("AuthorUsername");
+
+
+
             });
             // Configure other entities
             modelBuilder.Entity<RatingDomain>(entity =>
@@ -58,6 +62,8 @@ namespace DataAccessLayer.DbContextFolder
 
                 // Optionally, if you have a User entity and want to establish the relationship
                 entity.HasOne<UserDomain>().WithMany().HasForeignKey(c => c.UserId);
+
+           
             });
             modelBuilder.Entity<WatchlistDomain>(entity =>
             {

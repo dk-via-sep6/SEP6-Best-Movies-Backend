@@ -1,13 +1,14 @@
 ﻿using DomainLayer.Entities;
+using ServiceLayer.DTOs;
 
 namespace ServiceLayer.Interfaces
 {
     public interface IWatchlistDataService
     {
-        Task<WatchlistDomain> CreateWatchlistAsync(WatchlistDomain watchlist);
+        Task<WatchlistDTO> CreateWatchlistAsync(WatchlistDTO watchlist);
         Task<WatchlistDomain> GetWatchlistByIdAsync(int id);
-        Task<IEnumerable<WatchlistDomain>> GetWatchlistsByUserIdAsync(string userId);
-        Task UpdateWatchlistAsync(WatchlistDomain watchlist);
+        Task<List<WatchlistDTO>> GetWatchlistsByUserIdAsync(string userId);
+        Task<WatchlistDTO> UpdateWatchlistAsync(WatchlistDTO watchlist);
         Task DeleteWatchlistAsync(int id);
     }
 }

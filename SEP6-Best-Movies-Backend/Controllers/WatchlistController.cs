@@ -1,5 +1,4 @@
-﻿using DomainLayer.Entities;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.DTOs;
 using ServiceLayer.Interfaces;
 
@@ -19,26 +18,16 @@ namespace SEP6_Best_Movies_Backend.Controllers
 
         // POST: api/watchlist
         [HttpPost]
-        public async Task<ActionResult<WatchlistDTO>> CreateWatchlist([FromBody] WatchlistDTO watchlistDto)
+        public async Task<IActionResult> CreateWatchlist([FromBody] WatchlistDTO watchlistDTO)
         {
-            var watchlistDomain = new WatchlistDomain
+            var createdWatchlist = await _watchlistDataService.CreateWatchlistAsync(watchlistDTO);
+            if (createdWatchlist == null)
             {
-                Name = watchlistDto.Name,
-                Movies = watchlistDto.Movies,
-                UserId = watchlistDto.UserId
-            };
+                return NotFound();
+            }
 
-            var createdWatchlist = await _watchlistDataService.CreateWatchlistAsync(watchlistDomain);
 
-            var createdWatchlistDto = new WatchlistDTO
-            {
-                Id = createdWatchlist.Id,
-                Name = createdWatchlist.Name,
-                Movies = createdWatchlist.Movies,
-                UserId = createdWatchlist.UserId
-            };
-
-            return CreatedAtAction(nameof(GetWatchlist), new { id = createdWatchlist.Id }, createdWatchlistDto);
+            return Ok(createdWatchlist);
         }
 
         // GET: api/watchlist/{id}
@@ -55,7 +44,7 @@ namespace SEP6_Best_Movies_Backend.Controllers
             {
                 Id = watchlist.Id,
                 Name = watchlist.Name,
-                Movies = watchlist.Movies,
+                //    Movies = watchlist.Movies,
                 UserId = watchlist.UserId
             };
 
@@ -65,39 +54,26 @@ namespace SEP6_Best_Movies_Backend.Controllers
 
         // GET: api/watchlist/user/{userId}
         [HttpGet("user/{userId}")]
-        public async Task<ActionResult<IEnumerable<WatchlistDTO>>> GetWatchlistsByUserId(string userId)
+        public async Task<IActionResult> GetWatchlistsByUserId(string userId)
         {
             var watchlists = await _watchlistDataService.GetWatchlistsByUserIdAsync(userId);
-
-            var watchlistDtos = watchlists.Select(wl => new WatchlistDTO
-            {
-                Id = wl.Id,
-                Name = wl.Name,
-                Movies = wl.Movies,
-                UserId = wl.UserId
-            }).ToList();
-
-            return Ok(watchlistDtos);
+            if (watchlists == null) { return NotFound(); }
+            return Ok(watchlists);
         }
 
 
-        // PUT: api/watchlist/{id}
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateWatchlist(int id, [FromBody] WatchlistDTO watchlistDto)
+        // PUT: api/watchlist
+        [HttpPut]
+        public async Task<IActionResult> UpdateWatchlist([FromBody] WatchlistDTO watchlistDto)
         {
-            var watchlistToUpdate = await _watchlistDataService.GetWatchlistByIdAsync(id);
-            if (watchlistToUpdate == null)
+            var updatedWatchList = await _watchlistDataService.UpdateWatchlistAsync(watchlistDto);
+
+            if (updatedWatchList == null)
             {
                 return NotFound();
             }
 
-            watchlistToUpdate.Name = watchlistDto.Name;
-            watchlistToUpdate.Movies = watchlistDto.Movies;
-            // UserId is typically not updated, but if needed, can be set here
-
-            await _watchlistDataService.UpdateWatchlistAsync(watchlistToUpdate);
-
-            return NoContent();
+            return Ok(updatedWatchList);
         }
 
 

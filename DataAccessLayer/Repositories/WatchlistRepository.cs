@@ -34,10 +34,11 @@ namespace DataAccessLayer.Repositories
                 .ToListAsync();
         }
 
-        public async Task UpdateWatchlistAsync(WatchlistDomain watchlist)
+        public async Task<WatchlistDomain> UpdateWatchlistAsync(WatchlistDomain watchlist)
         {
             _context.Entry(watchlist).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+            return watchlist;
         }
 
         public async Task DeleteWatchlistAsync(int id)

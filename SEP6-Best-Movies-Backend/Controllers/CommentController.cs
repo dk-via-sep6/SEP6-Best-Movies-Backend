@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DomainLayer.Entities;
+using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.DTOs;
 using ServiceLayer.Interfaces;
-using DomainLayer.Entities;
 // ... other necessary using directives
 
 namespace SEP6_Best_Movies_Backend.Controllers
@@ -17,7 +17,7 @@ namespace SEP6_Best_Movies_Backend.Controllers
             _commentDataService = commentDataService;
         }
 
-        // POST: api/comments
+        // POST: api/comment
         [HttpPost]
         public async Task<ActionResult<CommentDTO>> CreateComment([FromBody] CommentDTO commentDto)
         {
@@ -28,7 +28,7 @@ namespace SEP6_Best_Movies_Backend.Controllers
                 MovieId = commentDto.MovieId,
                 Timestamp = commentDto.Timestamp,
                 Content = commentDto.Content,
-                LikedBy=commentDto.LikedBy,
+                LikedBy = commentDto.LikedBy,
                 AuthorUsername = commentDto.AuthorUsername
             };
             var createdComment = await _commentDataService.CreateCommentAsync(comment);
@@ -41,7 +41,7 @@ namespace SEP6_Best_Movies_Backend.Controllers
                 MovieId = createdComment.MovieId,
                 Timestamp = createdComment.Timestamp,
                 Content = createdComment.Content,
-                LikedBy=createdComment.LikedBy,
+                LikedBy = createdComment.LikedBy,
                 AuthorUsername = createdComment.AuthorUsername
 
             };
@@ -65,8 +65,8 @@ namespace SEP6_Best_Movies_Backend.Controllers
                 MovieId = comment.MovieId,
                 Timestamp = comment.Timestamp,
                 Content = comment.Content,
-                LikedBy=comment.LikedBy,
-                AuthorUsername=comment.AuthorUsername,
+                LikedBy = comment.LikedBy,
+                AuthorUsername = comment.AuthorUsername,
             };
             return Ok(commentDto);
         }
@@ -84,8 +84,8 @@ namespace SEP6_Best_Movies_Backend.Controllers
                 MovieId = c.MovieId,
                 Timestamp = c.Timestamp,
                 Content = c.Content,
-                LikedBy=c.LikedBy,
-                AuthorUsername=c.AuthorUsername,
+                LikedBy = c.LikedBy,
+                AuthorUsername = c.AuthorUsername,
             }).ToList();
 
             return Ok(commentDtos);
@@ -126,7 +126,7 @@ namespace SEP6_Best_Movies_Backend.Controllers
             commentToUpdate.MovieId = commentDto.MovieId;
             commentToUpdate.Timestamp = commentDto.Timestamp;
             commentToUpdate.Content = commentDto.Content;
-            commentToUpdate.LikedBy=commentDto.LikedBy;
+            commentToUpdate.LikedBy = commentDto.LikedBy;
             commentToUpdate.AuthorUsername = commentDto.AuthorUsername;
             await _commentDataService.UpdateCommentAsync(commentToUpdate);
             return NoContent();

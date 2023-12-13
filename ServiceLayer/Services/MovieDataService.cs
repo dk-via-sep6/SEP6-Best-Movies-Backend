@@ -27,16 +27,12 @@ namespace ServiceLayer.Services
             var movieData = await _movieService.SearchByTitleAsync(title);
             var domainObject = _mapper.Map<List<MovieInfoDomain>>(movieData);
 
-            // Assuming you have a way to calculate the mean vote (C)
             double meanVote = CalculateMeanVote(domainObject);
 
-            // Define the minimum number of votes required (m)
-            // You can adjust this based on your data
             int minVoteCount = CalculateMinVoteCount(domainObject);
 
             var movieDTOs = _mapper.Map<List<MovieDTO>>(domainObject);
 
-            // Calculate weighted ratings and sort
             foreach (var movie in movieDTOs)
             {
                 movie.WeightedRating = CalculateWeightedRating(movie.VoteCount, movie.VoteAverage, minVoteCount, meanVote);

@@ -44,7 +44,6 @@ namespace SEP6_Best_Movies_Backend.Controllers
             {
                 Id = watchlist.Id,
                 Name = watchlist.Name,
-                //    Movies = watchlist.Movies,
                 UserId = watchlist.UserId
             };
 

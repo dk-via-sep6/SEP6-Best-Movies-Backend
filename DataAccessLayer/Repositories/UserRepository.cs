@@ -2,7 +2,6 @@
 using DataAccessLayer.Interfaces;
 using DomainLayer.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repository
 {

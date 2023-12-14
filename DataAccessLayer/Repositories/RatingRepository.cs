@@ -2,9 +2,7 @@
 using DataAccessLayer.Interfaces;
 using DomainLayer.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace DataAccessLayer.Repositories
 {

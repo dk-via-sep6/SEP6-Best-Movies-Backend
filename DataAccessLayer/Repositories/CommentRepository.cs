@@ -35,14 +35,13 @@ namespace DataAccessLayer.Repositories
                       user => user.Id,
                       (comment, user) => new CommentDomain
                       {
-                          // Ensure all relevant properties are mapped
                           Id = comment.Id,
-                          AuthorId = comment.AuthorId, // Include this line
+                          AuthorId = comment.AuthorId,
                           MovieId = comment.MovieId,
                           LikedBy = comment.LikedBy,
                           Timestamp = comment.Timestamp,
                           Content = comment.Content,
-                          AuthorUsername = user.Username // Map the username
+                          AuthorUsername = user.Username 
                       })
                 .ToListAsync();
 

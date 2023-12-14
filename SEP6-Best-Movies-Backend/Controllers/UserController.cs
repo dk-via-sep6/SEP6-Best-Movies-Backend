@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.DTOs;
 using ServiceLayer.Interfaces;
-using System.Threading.Tasks;
 
 namespace SEP6_Best_Movies_Backend.Controllers
 {

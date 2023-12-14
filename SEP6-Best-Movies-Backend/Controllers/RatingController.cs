@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.DTOs;
 using ServiceLayer.Interfaces;
-using ServiceLayer.Services;
-// ... other necessary using directives
 
 [ApiController]
 [Route("api/[controller]")]
@@ -57,7 +55,6 @@ public class RatingsController : ControllerBase
         return Ok(ratingDto);
     }
 
-    // ... Implement other CRUD operations
 
     // Example for GET: api/ratings/movie/{movieId}
     [HttpGet("movie/{movieId}")]
@@ -75,7 +72,6 @@ public class RatingsController : ControllerBase
         return Ok(ratingDtos);
     }
 
-    // ... Similar methods for Update and Delete
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateRating(int id, [FromBody] RatingDTO ratingDto)
     {
@@ -85,7 +81,7 @@ public class RatingsController : ControllerBase
             return NotFound();
         }
 
-        ratingToUpdate.UserId = ratingDto.UserId; // Depending on your design, you might not allow updating UserId
+        ratingToUpdate.UserId = ratingDto.UserId;
         ratingToUpdate.MovieId = ratingDto.MovieId;
         ratingToUpdate.Rating = ratingDto.Rating;
 

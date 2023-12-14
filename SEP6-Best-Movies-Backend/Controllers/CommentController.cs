@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.DTOs;
 using ServiceLayer.Interfaces;
-// ... other necessary using directives
 
 namespace SEP6_Best_Movies_Backend.Controllers
 {
@@ -61,7 +60,6 @@ namespace SEP6_Best_Movies_Backend.Controllers
             }
             var commentDto = new CommentDTO
             {
-                // Map properties from CommentDomain to CommentDTO
                 Id = comment.Id,
                 AuthorId = comment.AuthorId,
                 MovieId = comment.MovieId,

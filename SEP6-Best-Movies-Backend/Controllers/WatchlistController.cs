@@ -44,7 +44,6 @@ namespace SEP6_Best_Movies_Backend.Controllers
             {
                 Id = watchlist.Id,
                 Name = watchlist.Name,
-                //    Movies = watchlist.Movies,
                 UserId = watchlist.UserId
             };
 
@@ -91,8 +90,5 @@ namespace SEP6_Best_Movies_Backend.Controllers
 
             return NoContent();
         }
-        // Call service to delete watchlist and return the result
     }
-
-    // Additional methods can be added as needed
 }

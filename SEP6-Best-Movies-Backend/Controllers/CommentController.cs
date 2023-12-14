@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.DTOs;
 using ServiceLayer.Interfaces;
-// ... other necessary using directives
 
 namespace SEP6_Best_Movies_Backend.Controllers
 {
@@ -18,17 +17,16 @@ namespace SEP6_Best_Movies_Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CommentDTO>> CreateComment([FromBody] CommentDTO commentDto)
+        public async Task<IActionResult> CreateComment([FromBody] CommentDTO commentDto)
         {
             await Console.Out.WriteLineAsync("controller comment");
             await Console.Out.WriteLineAsync(commentDto.ToString());
 
             var comment = new CommentDomain
             {
-                // Map properties from commentDto to CommentDomain
                 AuthorId = commentDto.AuthorId,
                 MovieId = commentDto.MovieId,
-                Timestamp = DateTime.UtcNow, // Use UTC time, or DateTime.Now for local time
+                Timestamp = DateTime.UtcNow,
                 Content = commentDto.Content,
                 LikedBy = commentDto.LikedBy,
                 AuthorUsername = commentDto.AuthorUsername
@@ -38,7 +36,6 @@ namespace SEP6_Best_Movies_Backend.Controllers
 
             var createdCommentDto = new CommentDTO
             {
-                // Map properties from CommentDomain to CommentDTO
                 Id = createdComment.Id,
                 AuthorId = createdComment.AuthorId,
                 MovieId = createdComment.MovieId,
@@ -54,7 +51,7 @@ namespace SEP6_Best_Movies_Backend.Controllers
 
         // GET: api/comments/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<CommentDTO>> GetComment(int id)
+        public async Task<IActionResult> GetComment(int id)
         {
             var comment = await _commentDataService.GetCommentByIdAsync(id);
             if (comment == null)
@@ -63,7 +60,6 @@ namespace SEP6_Best_Movies_Backend.Controllers
             }
             var commentDto = new CommentDTO
             {
-                // Map properties from CommentDomain to CommentDTO
                 Id = comment.Id,
                 AuthorId = comment.AuthorId,
                 MovieId = comment.MovieId,
@@ -77,12 +73,11 @@ namespace SEP6_Best_Movies_Backend.Controllers
 
         // GET: api/comments
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CommentDTO>>> GetAllComments()
+        public async Task<IActionResult> GetAllComments()
         {
             var comments = await _commentDataService.GetAllCommentsAsync();
             var commentDtos = comments.Select(c => new CommentDTO
             {
-                // Map each CommentDomain to CommentDTO
                 Id = c.Id,
                 AuthorId = c.AuthorId,
                 MovieId = c.MovieId,
@@ -97,12 +92,11 @@ namespace SEP6_Best_Movies_Backend.Controllers
 
         // GET: api/comments/movie/{movieId}
         [HttpGet("movie/{movieId}")]
-        public async Task<ActionResult<IEnumerable<CommentDTO>>> GetCommentsByMovieId(int movieId)
+        public async Task<IActionResult> GetCommentsByMovieId(int movieId)
         {
             var comments = await _commentDataService.GetCommentsByMovieIdAsync(movieId);
             var commentDtos = comments.Select(c => new CommentDTO
             {
-                // Map each CommentDomain to CommentDTO
                 Id = c.Id,
                 AuthorId = c.AuthorId,
                 MovieId = c.MovieId,
@@ -125,7 +119,6 @@ namespace SEP6_Best_Movies_Backend.Controllers
                 return NotFound();
             }
 
-            // Map properties from CommentDTO to CommentDomain
             commentToUpdate.AuthorId = commentDto.AuthorId;
             commentToUpdate.MovieId = commentDto.MovieId;
             commentToUpdate.Timestamp = commentDto.Timestamp;

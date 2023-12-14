@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using ServiceLayer.Interfaces;
 
-namespace ServiceLayer.Services
+namespace ServiceLayer.API
 {
     public class TMdbPeopleService : ITMdbPeopleService
     {

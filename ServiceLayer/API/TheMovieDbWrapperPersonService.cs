@@ -3,7 +3,7 @@ using DM.MovieApi.ApiResponse;
 using DM.MovieApi.MovieDb.People;
 using ServiceLayer.Interfaces;
 
-namespace ServiceLayer.Services
+namespace ServiceLayer.API
 {
     public class TheMovieDbWrapperPersonService : ITheMovieDbWrapperPersonService
     {

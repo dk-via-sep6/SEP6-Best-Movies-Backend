@@ -9,6 +9,7 @@ using DM.MovieApi.MovieDb.People;
 using DomainLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using ServiceLayer.API;
 using ServiceLayer.DTOs;
 using ServiceLayer.Interfaces;
 using ServiceLayer.Services;
@@ -52,7 +53,6 @@ var config = new MapperConfiguration(cfg =>
     cfg.CreateMap<PersonInfoRoleDomain, PersonInfoRoleDTO>();
     cfg.CreateMap<PeopleDomain, PeopleDTO>();
     cfg.CreateMap<PersonResultDomain, PersonResultDTO>();
-    cfg.CreateMap<KnownForDomain, KnownForDTO>();
 
 
     //Comment Mappings

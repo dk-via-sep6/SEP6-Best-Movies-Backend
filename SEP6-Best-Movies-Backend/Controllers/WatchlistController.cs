@@ -91,8 +91,5 @@ namespace SEP6_Best_Movies_Backend.Controllers
 
             return NoContent();
         }
-        // Call service to delete watchlist and return the result
     }
-
-    // Additional methods can be added as needed
 }
